@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from 'react'
 import User from './user'
+import Pagination from './pagination'
+import { paginate } from '../utils/paginate'
+import PropTypes from 'prop-types'
 
-const Users = ({users, ...rest}) => {
+const Users = ({ users, ...rest }) => {
+    const [currentPage, setCurrentPage] = useState(1)
 
     //console.log(users)
     //console.log(rest)
@@ -12,17 +16,26 @@ const Users = ({users, ...rest}) => {
     //const valuesFunctions = valuesAll.filter(value => (typeof value === 'function'))
     //console.log(valuesFunctions)
 
-    // const handleDelete = () => {
+    //const handleDelete = () => {
     //
-    // }
+    //}
+
+    const itemsCount = users.length
+    const pageSize = 4
+
+    const handlePageChange = (pageIndex) => {
+        //console.log('page: ', pageIndex)
+        setCurrentPage(pageIndex)
+    }
+
+    const userPages = paginate(users, currentPage, pageSize)
 
     return (
         <>
             {/*{console.log(length)}*/}
-            {(users.length > 0) &&
-                (
-                    <table className='table'>
-                        <thead>
+            {itemsCount > 0 && (
+                <table className="table">
+                    <thead>
                         <tr>
                             <th>Имя</th>
                             <th>Качества</th>
@@ -32,9 +45,9 @@ const Users = ({users, ...rest}) => {
                             <th>Избранное</th>
                             <th></th>
                         </tr>
-                        </thead>
-                        <tbody>
-                        {users.map((user) => {
+                    </thead>
+                    <tbody>
+                        {userPages.map((user) => {
                             //console.log(row._id)
                             return (
                                 <User
@@ -45,14 +58,22 @@ const Users = ({users, ...rest}) => {
                                     //onToggle={valuesFunctions[1]}
                                 />
                             )
-                        })
-                        }
-                        </tbody>
-                    </table>
-                )
-            }
+                        })}
+                    </tbody>
+                </table>
+            )}
+            <Pagination
+                itemsCount={itemsCount}
+                pageSize={pageSize}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+            />
         </>
     )
+}
+Users.propTypes = {
+    users: PropTypes.array.isRequired,
+    rest: PropTypes.array.isRequired
 }
 
 export default Users
