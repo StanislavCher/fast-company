@@ -14,13 +14,13 @@ const User = ({
     onToggleBookmark,
     onDelete
 }) => {
-    //console.log(row)
-    //console.log(onToggleBookmark)
-    //console.log(row.onDelete)
+    // console.log(profession)
+    // console.log(onToggleBookmark)
+    // console.log(row.onDelete)
 
-    //const handleDelete = () => {
-    //onDelete(_id)
-    //}
+    // const handleDelete = () => {
+    // onDelete(_id)
+    // }
 
     return (
         <>
@@ -35,31 +35,31 @@ const User = ({
                 <td>{completedMeetings}</td>
                 <td>{rate}/5</td>
                 <td>
-                    {/*onClick={() => {row.onToggle(row.id)}}>*/}
-                    {/*onClick={handleToggle}>*/}
+                    {/* onClick={() => {row.onToggle(row.id)}}> */}
+                    {/* onClick={handleToggle}> */}
                     <Bookmark
                         status={bookmark}
                         onClick={() => {
                             onToggleBookmark(_id)
                         }}
-                        //id={_id}
-                        //onToggle={onToggle}
+                        // id={_id}
+                        // onToggle={onToggle}
                     />
                 </td>
                 <td>
                     <button
                         className="btn btn-danger"
                         onClick={() => onDelete(_id)}
-                        //onClick={() => row.onDelete(row.id)}
-                        //onClick={row.onDelete}
-                        //() => {
-                        ////console.log(typeof row[0])
-                        //console.log(row[0])
-                        //row[0].toString()
-                        ////row[0](row.id)
-                        //}
-                        //}
-                        //onClick={row[0](row.id)}
+                        // onClick={() => row.onDelete(row.id)}
+                        // onClick={row.onDelete}
+                        // () => {
+                        // // console.log(typeof row[0])
+                        // console.log(row[0])
+                        // row[0].toString()
+                        // // row[0](row.id)
+                        // }
+                        // }
+                        // onClick={row[0](row.id)}
                     >
                         delete
                     </button>

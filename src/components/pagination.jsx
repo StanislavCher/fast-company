@@ -4,14 +4,14 @@ import PropTypes from 'prop-types'
 
 const Pagination = ({ itemsCount, pageSize, currentPage, onPageChange }) => {
     const pageCount = Math.ceil(itemsCount / pageSize)
-    if (pageCount === 1) return null //(<></>)
+    if (pageCount === 1) return null // (<></>)
     const pages = _.range(1, pageCount + 1, 1)
-    //console.log({pageCount}, {pages}, {currentPage}, {onPageChange})
+    // console.log({pageCount}, {pages}, {currentPage}, {onPageChange})
     return (
         <div>
             <nav>
                 <ul className="pagination m-4">
-                    {/*<li className="page-item"><a className="page-link">Предыдущая</a></li>*/}
+                    {/* <li className="page-item"><a className="page-link">Предыдущая</a></li> */}
                     {pages.map((page) => {
                         return (
                             <li
@@ -30,10 +30,10 @@ const Pagination = ({ itemsCount, pageSize, currentPage, onPageChange }) => {
                             </li>
                         )
                     })}
-                    {/*<li className="page-item"><a className="page-link">1</a></li>*/}
-                    {/*<li className="page-item"><a className="page-link">2</a></li>*/}
-                    {/*<li className="page-item"><a className="page-link">3</a></li>*/}
-                    {/*<li className="page-item"><a className="page-link">Следующая</a></li>*/}
+                    {/* <li className="page-item"><a className="page-link">1</a></li> */}
+                    {/* <li className="page-item"><a className="page-link">2</a></li> */}
+                    {/* <li className="page-item"><a className="page-link">3</a></li> */}
+                    {/* <li className="page-item"><a className="page-link">Следующая</a></li> */}
                 </ul>
             </nav>
         </div>

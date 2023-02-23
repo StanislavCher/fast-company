@@ -17,8 +17,11 @@ module.exports = {
     rules: {
         indent: ['error', 4],
         'no-extra-semi': 2,
-        'space-before-function-paren': ['error', 'never'],
+        'space-before-function-paren': [
+            'error',
+            { anonymous: 'always', named: 'never' }
+        ],
         quotes: ['error', 'single', { allowTemplateLiterals: true }],
-        'spaced-comment': ['error', 'never']
+        'spaced-comment': ['error', 'always', { markers: ['/'] }]
     }
 }
