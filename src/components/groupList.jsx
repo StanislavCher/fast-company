@@ -12,14 +12,10 @@ const GroupList = ({
         // console.log('id', id)
         onItemSelect(id)
     }
-    // console.log(Object.values(items))
-    // console.log(Array.isArray(items), items)
     if (Array.isArray(items) === false) {
         return (
             <ul className="list-group">
                 {Object.keys(items).map((item) => {
-                    // console.log('selectedItem', selectedItem)
-                    // console.log('items', items[item])
                     return (
                         <li
                             key={items[item][valueProperty]}
@@ -40,8 +36,6 @@ const GroupList = ({
         return (
             <ul className="list-group">
                 {items.map((item) => {
-                    // console.log('selectedItem', selectedItem)
-                    // console.log('items', items[item])
                     return (
                         <li
                             key={item[valueProperty]}
