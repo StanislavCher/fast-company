@@ -151,6 +151,15 @@ const fetchAll = () =>
         }, 2000)
     })
 
-export default {
-    fetchAll
+const getById = (id) =>
+    new Promise((resolve) => {
+        window.setTimeout(function () {
+            resolve(users.find((user) => { return (user._id === id) }))
+        }, 1000)
+    })
+
+export {
+    users,
+    fetchAll,
+    getById
 }

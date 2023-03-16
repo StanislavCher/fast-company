@@ -1,5 +1,5 @@
 import React from 'react'
-import Quality from './qualities'
+import Quality from './quality'
 import PropTypes from 'prop-types'
 
 const QualitiesList = ({ qualities }) => {
