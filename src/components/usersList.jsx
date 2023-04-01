@@ -7,12 +7,14 @@ import api from '../api/index'
 import SearchStatus from './searchStatus'
 import UsersTable from './usersTable'
 import _ from 'lodash'
+import TextField from './textField'
 
 const UsersList = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [professions, setProfessions] = useState(undefined)
     const [selectedProf, setSelectedProf] = useState(undefined)
     const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
+    const [searchQuery, setSearchQuery] = useState('')
 
     const [users, setUsers] = useState(undefined)
 
@@ -44,26 +46,44 @@ const UsersList = () => {
 
     useEffect(() => {
         setCurrentPage(1)
-    }, [selectedProf])
+    }, [selectedProf, searchQuery])
 
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex)
     }
 
     const handleProfessionSelect = (item) => {
+        if (searchQuery !== '') setSearchQuery('')
         if (item === selectedProf) setSelectedProf(undefined)
         else setSelectedProf(item)
     }
 
     if (users) {
-        const selectedUsers = selectedProf
-            ? users.filter((user) => {
-                return (
-                    JSON.stringify(user.profession) ===
-                    JSON.stringify(selectedProf)
-                )
-            })
-            : users
+        // let selectedUsers
+        //
+        // if (!searchingUserName) {
+        //     selectedUsers = selectedProf
+        //         ? users.filter((user) => {
+        //             return (
+        //                 JSON.stringify(user.profession) ===
+        //                 JSON.stringify(selectedProf)
+        //             )
+        //         })
+        //         : users
+        // } else {
+        //     selectedUsers = users.filter(user => user.name.toLowerCase().includes(searchingUserName.toLowerCase()))
+        // }
+
+        const selectedUsers = searchQuery
+            ? users.filter(user => user.name.toLowerCase().includes(searchQuery.toLowerCase()))
+            : selectedProf
+                ? users.filter((user) => {
+                    return (
+                        JSON.stringify(user.profession) ===
+                        JSON.stringify(selectedProf)
+                    )
+                })
+                : users
 
         const itemsCount = users ? selectedUsers.length : 0
 
@@ -79,6 +99,18 @@ const UsersList = () => {
 
         const handleSort = (item) => {
             setSortBy(item)
+        }
+
+        const handleUserSearch = ({ target }) => {
+            // setSearchingUserName(prevState => prevState + target.value)
+            // console.log('target.value', target.value)
+            // console.log('searchingUserName prefer', searchingUserName)
+            setSearchQuery(target.value)
+            setSelectedProf(undefined)
+            // console.log('searchingUserName after', searchingUserName)
+            // console.log(users)
+            // console.log(users.filter(user => user.name.includes(target.value)))
+            // setUsers(users.filter(user => user.name.includes(target.value)))
         }
 
         // const handleShowUser = () => {
@@ -104,6 +136,7 @@ const UsersList = () => {
                 )}
                 <div className="d-flex flex-column m-2">
                     <SearchStatus length={itemsCount}/>
+                    <TextField onChange={handleUserSearch} type='search' name='Search' label='' value={searchQuery}/>
                     {itemsCount > 0 && (
                         <UsersTable
                             users={usersCrop}
