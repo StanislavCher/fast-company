@@ -1,106 +1,32 @@
-import React, { useEffect, useState } from 'react'
-import TextField from '../components/textField'
-import { validator } from '../utils/validator'
+import React, { useState } from 'react'
+import { useParams } from 'react-router'
+import LoginForm from '../components/ui/loginForm'
+import RegisterForm from '../components/ui/registerForm'
 
 const Login = () => {
-    const [data, setData] = useState({
-        email: '',
-        password: ''
-    })
+    const { type } = useParams()
+    const [formType, setFormType] = useState((type === 'register') ? type : 'login')
 
-    const [errors, setErrors] = useState({})
-
-    useEffect(() => {
-        setErrors(validator(data, validatorConfig))
-    }, [data])
-
-    const validatorConfig = {
-        email: {
-            isRequired: {
-                message: `email не должен быть пустым!`
-            },
-            isEmail: {
-                message: `email введен некорректно!`
-            }
-        },
-        password: {
-            isRequired: {
-                message: `пароль не должен быть пустым!`
-            },
-            isCapitalSymbol: {
-                message: `пароль должен содержать хотя бы 1 заглавную букву!`
-            },
-            isContainDigit: {
-                message: `пароль должен содержать хотя бы 1 цифру!`
-            },
-            isMinLen: {
-                message: `минимальная длина пароля 8 символов!`,
-                len: 8
-            }
-        }
-    }
-
-    const validate = () => {
-        const errors = validator(data, validatorConfig)
-        setErrors(errors)
-        return Object.keys(errors).length === 0
-    }
-
-    const handleChange = ({ target }) => {
-        setData(prevState => {
-            return {
-                ...prevState,
-                [target.name]: target.value
-            }
-        })
-    }
-
-    const isValid = Object.keys(errors).length === 0
-
-    const handleSubmit = (e) => {
-        // console.log(data)
-        e.preventDefault()
-        const isValid = validate()
-        if (!isValid) return
-        console.log(data)
+    const toggleFormType = () => {
+        setFormType(prevState => (prevState === 'register') ? 'login' : 'register')
     }
 
     return (
         <div className='container mt-5'>
             <div className="row">
                 <div className="col-md-6 offset-md-3 shadow p-4">
-                    <h3 className='mb-4'>Login</h3>
-                    <form onSubmit={handleSubmit}>
-                        <TextField
-                            label='Enter email'
-                            name='email'
-                            value={data.email}
-                            onChange={handleChange}
-                            error={errors.email}
-                        />
-                        <TextField
-                            label='Enter password'
-                            type='password'
-                            name='password'
-                            value={data.password}
-                            onChange={handleChange}
-                            error={errors.password}
-                        />
-                        {/* <input*/}
-                        {/*    // type="email"*/}
-                        {/*    // pattern="^\S+@\S+\.\S+$"*/}
-                        {/*    // required*/}
-                        {/*    // minLength='6'*/}
-                        {/* />*/}
-                        <button
-                            type='submit'
-                            disabled={!isValid}
-                            // disabled={true}
-                            className='btn btn-primary w-100 mx-auto'
-                        >
-                            Submit
-                        </button>
-                    </form>
+                    { (formType === 'register')
+                        ? <>
+                            <h3 className='mb-4'>Register</h3>
+                            <RegisterForm/>
+                            <p>Already have an account? <a role='button' onClick={toggleFormType}>Sign In</a></p>
+                        </>
+                        : <>
+                            <h3 className='mb-4'>Login</h3>
+                            <LoginForm/>
+                            <p>Do not have an account? <a role='button' onClick={toggleFormType}>Sign Up</a></p>
+                        </>
+                    }
                 </div>
             </div>
         </div>
