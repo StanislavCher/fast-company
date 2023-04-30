@@ -1,37 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const RadioField = ({ label, value, onChange, options, error }) => {
-    const getInputClasses = () => {
-        return 'form-check-input' + (error ? ' is-invalid' : '')
+const RadioField = ({ options, name, onChange, value, label }) => {
+    const handleChange = ({ target }) => {
+        onChange({ name: target.name, value: target.value })
     }
-    // console.log('options1', options)
-    const optionsArray =
-        !Array.isArray(options) && typeof (options) === 'object'
-            ? Object.keys(options).map(optionName => {
-                return { name: options[optionName].name, value: options[optionName]._id }
-            })
-            : options.map(option => {
-                return { name: option.name, value: option._id }
-            })
-    // console.log('options2', options)
-    // console.log('optionsArray', optionsArray)
-    // console.log('value', value)
     return (
         <div className='mb-4'>
-            <label htmlFor="validationCustom04" className="form-label">{label}</label>
-            {optionsArray.map(option => {
+            <label className="form-label">{label}</label>
+            {options.map(option => {
                 return (
-                    <div key={option.name + '_' + option.value} className="form-check">
+                    <div key={option.name + '_' + option.value} className="form-check form-check-inline">
                         <input
-                            type="radio"
-                            className={getInputClasses()}
-                            id={option.name + '_' + option.value}
+                            className='form-check-input'
+                            type='radio'
                             name={name}
-                            value={option.value}
-                            required
+                            id={option.name + '_' + option.value}
                             checked={option.value === value}
-                            onChange={onChange}
+                            value={option.value}
+                            // onChange={onChange}
+                            onChange={handleChange}
                         />
                         <label
                             className="form-check-label"
@@ -48,11 +36,11 @@ const RadioField = ({ label, value, onChange, options, error }) => {
 }
 
 RadioField.propTypes = {
-    label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired,
     options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-    error: PropTypes.string
+    onChange: PropTypes.func.isRequired,
+    value: PropTypes.string.isRequired,
+    label: PropTypes.string
 }
 
 export default RadioField

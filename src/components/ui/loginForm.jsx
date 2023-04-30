@@ -46,7 +46,7 @@ const LoginForm = () => {
         return Object.keys(errors).length === 0
     }
 
-    const handleChange = ({ target }) => {
+    const handleChange = (target) => {
         setData(prevState => {
             return {
                 ...prevState,

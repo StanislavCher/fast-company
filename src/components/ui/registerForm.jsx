@@ -4,14 +4,17 @@ import TextField from '../common/form/textField'
 import api from '../../api'
 import SelectField from '../common/form/selectField'
 import RadioField from '../common/form/radioField'
+import MultiSelectField from '../common/form/multiSelectField'
 
 const RegisterForm = () => {
     const [professions, setProfessions] = useState([])
+    const [qualities, setQualities] = useState({})
     const [data, setData] = useState({
         email: '',
         password: '',
         profession: '',
-        sex: 'male'
+        sex: 'male',
+        qualities: []
     })
 
     const [errors, setErrors] = useState({})
@@ -23,6 +26,7 @@ const RegisterForm = () => {
     useEffect(() => {
         // console.log('send request')
         api.professions.fetchAll().then((data) => setProfessions(data))
+        api.qualities.fetchAll().then((data) => setQualities(data))
     }, [])
 
     // useEffect(() => {
@@ -66,7 +70,7 @@ const RegisterForm = () => {
         return Object.keys(errors).length === 0
     }
 
-    const handleChange = ({ target }) => {
+    const handleChange = (target) => {
         setData(prevState => {
             return {
                 ...prevState,
@@ -111,14 +115,20 @@ const RegisterForm = () => {
                 value={data.profession}
             />
             <RadioField
-                onChange={handleChange}
-                label='Выберите Ваш пол'
-                value={data.sex}
                 options={[
                     { name: 'Male', value: 'male' },
                     { name: 'FeMale', value: 'female' }
                 ]}
+                value={data.sex}
                 name='sex'
+                onChange={handleChange}
+                label='Выберите Ваш пол'
+            />
+            <MultiSelectField
+                options={qualities}
+                onChange={handleChange}
+                name='qualities'
+                label='Выберите Ваши качества'
             />
             {/* <div className='mb-4'>*/}
             {/*    <label htmlFor="validationCustom04" className="form-label">State</label>*/}
