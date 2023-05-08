@@ -5,6 +5,7 @@ import api from '../../api'
 import SelectField from '../common/form/selectField'
 import RadioField from '../common/form/radioField'
 import MultiSelectField from '../common/form/multiSelectField'
+import CheckBoxField from '../common/form/checkBoxField'
 
 const RegisterForm = () => {
     const [professions, setProfessions] = useState([])
@@ -14,7 +15,8 @@ const RegisterForm = () => {
         password: '',
         profession: '',
         sex: 'male',
-        qualities: []
+        qualities: [],
+        licence: false
     })
 
     const [errors, setErrors] = useState({})
@@ -60,6 +62,11 @@ const RegisterForm = () => {
         profession: {
             isRequired: {
                 message: `обязательно выберите свою профессию!`
+            }
+        },
+        licence: {
+            isChecked: {
+                message: `согласие с правилами обязательно!`
             }
         }
     }
@@ -130,6 +137,15 @@ const RegisterForm = () => {
                 name='qualities'
                 label='Выберите Ваши качества'
             />
+            <CheckBoxField
+                name='licence'
+                // label='Подтвердите согласие с правилами'
+                value={data.licence}
+                onChange={handleChange}
+                error={errors.licence}
+            >
+                Подтвердите согласие с <a>правилами</a>
+            </CheckBoxField>
             {/* <div className='mb-4'>*/}
             {/*    <label htmlFor="validationCustom04" className="form-label">State</label>*/}
             {/*    <select*/}

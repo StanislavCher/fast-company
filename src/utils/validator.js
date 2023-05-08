@@ -29,6 +29,12 @@ export const validator = (data, config) => {
             statusValidate = data.length < config.len
             break
         }
+        case 'isChecked': {
+            statusValidate = data.toString() === 'false'
+            // console.log('data', data)
+            // console.log('statusValidate', statusValidate)
+            break
+        }
         default: {
             break
         }

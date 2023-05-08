@@ -1,48 +1,69 @@
-import React, { useEffect, useState } from 'react'
+// import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import TextField from '../common/form/textField'
-import { validator } from '../../utils/validator'
+// import { validator } from '../../utils/validator'
+import CheckBoxField from '../common/form/checkBoxField'
+// import * as yup from 'yup'
+import { object, string } from 'yup'
 
 const LoginForm = () => {
     const [data, setData] = useState({
         email: '',
-        password: ''
+        password: '',
+        stayOn: false
     })
 
     const [errors, setErrors] = useState({})
 
-    useEffect(() => {
-        setErrors(validator(data, validatorConfig))
-    }, [data])
+    const validateScheme = object({
+        email: string()
+            .required('email не должен быть пустым!')
+            .email('email введен некорректно'),
+        password: string()
+            .required('пароль не должен быть пустым!')
+            .matches(/(?=.*[A-Z])/, 'пароль должен содержать хотя бы 1 заглавную букву!')
+            .matches(/(?=.*[0-9])/, 'пароль должен содержать хотя бы 1 цифру!')
+            .matches(/(?=.*[!@#$%^&*])/, 'пароль должен содержать хотя бы 1 из специальных символов!')
+            .matches(/(?=.{8,})/, 'минимальная длина пароля 8 символов!')
+    })
 
-    const validatorConfig = {
-        email: {
-            isRequired: {
-                message: `email не должен быть пустым!`
-            },
-            isEmail: {
-                message: `email введен некорректно!`
-            }
-        },
-        password: {
-            isRequired: {
-                message: `пароль не должен быть пустым!`
-            },
-            isCapitalSymbol: {
-                message: `пароль должен содержать хотя бы 1 заглавную букву!`
-            },
-            isContainDigit: {
-                message: `пароль должен содержать хотя бы 1 цифру!`
-            },
-            isMinLen: {
-                message: `минимальная длина пароля 8 символов!`,
-                len: 8
-            }
-        }
-    }
+    // useEffect(() => {
+    //     setErrors(validator(data, validatorConfig))
+    // }, [data])
+
+    // const validatorConfig = {
+    //     email: {
+    //         isRequired: {
+    //             message: `email не должен быть пустым!`
+    //         },
+    //         isEmail: {
+    //             message: `email введен некорректно!`
+    //         }
+    //     },
+    //     password: {
+    //         isRequired: {
+    //             message: `пароль не должен быть пустым!`
+    //         },
+    //         isCapitalSymbol: {
+    //             message: `пароль должен содержать хотя бы 1 заглавную букву!`
+    //         },
+    //         isContainDigit: {
+    //             message: `пароль должен содержать хотя бы 1 цифру!`
+    //         },
+    //         isMinLen: {
+    //             message: `минимальная длина пароля 8 символов!`,
+    //             len: 8
+    //         }
+    //     }
+    // }
 
     const validate = () => {
-        const errors = validator(data, validatorConfig)
-        setErrors(errors)
+        // const errors = validator(data, validatorConfig)
+        validateScheme
+            .validate(data)
+            .then(() => setErrors({}))
+            .catch((err) => setErrors({ [err.path]: err.message }))
+        // setErrors(errors)
         return Object.keys(errors).length === 0
     }
 
@@ -86,6 +107,14 @@ const LoginForm = () => {
                 onChange={handleChange}
                 error={errors.password}
             />
+            <CheckBoxField
+                name='stayOn'
+                // label='Подтвердите согласие с правилами'
+                value={data.stayOn}
+                onChange={handleChange}
+            >
+                Оставаться в системе
+            </CheckBoxField>
             <button
                 type='submit'
                 disabled={!isValid}

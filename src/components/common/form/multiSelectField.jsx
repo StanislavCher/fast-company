@@ -33,7 +33,7 @@ const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
             {/*    onInputChange={}*/}
             {/* />*/}
             <Select
-                isMulti={true}
+                isMulti
                 closeMenuOnSelect={false}
                 defaultValue={defaultValue}
                 options={optionsArray}
