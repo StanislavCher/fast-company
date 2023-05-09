@@ -1,10 +1,9 @@
-// import React, { useEffect, useState } from 'react'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import TextField from '../common/form/textField'
-// import { validator } from '../../utils/validator'
+import { validator } from '../../utils/validator'
 import CheckBoxField from '../common/form/checkBoxField'
 // import * as yup from 'yup'
-import { object, string } from 'yup'
+// import { object, string, ValidationError } from 'yup'
 
 const LoginForm = () => {
     const [data, setData] = useState({
@@ -15,55 +14,84 @@ const LoginForm = () => {
 
     const [errors, setErrors] = useState({})
 
-    const validateScheme = object({
-        email: string()
-            .required('email не должен быть пустым!')
-            .email('email введен некорректно'),
-        password: string()
-            .required('пароль не должен быть пустым!')
-            .matches(/(?=.*[A-Z])/, 'пароль должен содержать хотя бы 1 заглавную букву!')
-            .matches(/(?=.*[0-9])/, 'пароль должен содержать хотя бы 1 цифру!')
-            .matches(/(?=.*[!@#$%^&*])/, 'пароль должен содержать хотя бы 1 из специальных символов!')
-            .matches(/(?=.{8,})/, 'минимальная длина пароля 8 символов!')
-    })
+    // const validateScheme = object({
+    //     password: string()
+    //         .required('пароль не должен быть пустым!')
+    //         .matches(/(?=.*[A-Z])/, 'пароль должен содержать хотя бы 1 заглавную букву!')
+    //         .matches(/(?=.*[0-9])/, 'пароль должен содержать хотя бы 1 цифру!')
+    //         .matches(/(?=.*[!@#$%^&*])/, 'пароль должен содержать хотя бы 1 из специальных символов!')
+    //         .matches(/(?=.{8,})/, 'минимальная длина пароля 8 символов!'),
+    //     email: string()
+    //         .required('email не должен быть пустым!')
+    //         .email('email введен некорректно')
+    // })
 
     // useEffect(() => {
-    //     setErrors(validator(data, validatorConfig))
+    //     setErrors(validate1())
     // }, [data])
 
-    // const validatorConfig = {
-    //     email: {
-    //         isRequired: {
-    //             message: `email не должен быть пустым!`
-    //         },
-    //         isEmail: {
-    //             message: `email введен некорректно!`
-    //         }
-    //     },
-    //     password: {
-    //         isRequired: {
-    //             message: `пароль не должен быть пустым!`
-    //         },
-    //         isCapitalSymbol: {
-    //             message: `пароль должен содержать хотя бы 1 заглавную букву!`
-    //         },
-    //         isContainDigit: {
-    //             message: `пароль должен содержать хотя бы 1 цифру!`
-    //         },
-    //         isMinLen: {
-    //             message: `минимальная длина пароля 8 символов!`,
-    //             len: 8
-    //         }
-    //     }
-    // }
+    useEffect(() => {
+        setErrors(validator(data, validatorConfig))
+    }, [data])
 
-    const validate = () => {
-        // const errors = validator(data, validatorConfig)
-        validateScheme
-            .validate(data)
-            .then(() => setErrors({}))
-            .catch((err) => setErrors({ [err.path]: err.message }))
-        // setErrors(errors)
+    const validatorConfig = {
+        email: {
+            isRequired: {
+                message: `email не должен быть пустым!`
+            },
+            isEmail: {
+                message: `email введен некорректно!`
+            }
+        },
+        password: {
+            isRequired: {
+                message: `пароль не должен быть пустым!`
+            },
+            isCapitalSymbol: {
+                message: `пароль должен содержать хотя бы 1 заглавную букву!`
+            },
+            isContainDigit: {
+                message: `пароль должен содержать хотя бы 1 цифру!`
+            },
+            isMinLen: {
+                message: `минимальная длина пароля 8 символов!`,
+                len: 8
+            }
+        }
+    }
+
+    const validate = async () => {
+        const errors = validator(data, validatorConfig)
+
+        // validateScheme
+        //     .validate(data)
+        //     .then(() => setErrors({}))
+        //     .catch((err) => setErrors({ [err.path]: err.message }))
+        // try {
+        //     // const errorIs = await validateScheme.validate(data,
+        //     //     { stripUnknown: true })
+        //     await validateScheme.validate(data)
+        //     // if (errorIs === 'false') setErrors({})
+        //     setErrors({})
+        //     // console.log('errorIs|', errorIs)
+        //     return 'true'
+        // } catch (e) {
+        //     if (e instanceof ValidationError) {
+        //         // console.log('e', JSON.parse(e))
+        //         // console.log('e', e)
+        //         // console.log('e.path', e.path)
+        //         // console.log('e.message', e.message)
+        //         // console.log('e.name', e.name)
+        //         // console.log('e.loading', e.loading)
+        //         // console.log('e.errors', e.errors)
+        //         // console.log('e.baseDataPath', e.baseDataPath)
+        //         setErrors({ [e.path]: e.message })
+        //         return 'false'
+        //     }
+        // }
+        //
+        setErrors(errors)
+        // console.log(errors)
         return Object.keys(errors).length === 0
     }
 
