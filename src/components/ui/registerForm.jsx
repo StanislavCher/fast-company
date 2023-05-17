@@ -9,7 +9,7 @@ import CheckBoxField from '../common/form/checkBoxField'
 
 const RegisterForm = () => {
     const [professions, setProfessions] = useState([])
-    const [qualities, setQualities] = useState({})
+    const [qualities, setQualities] = useState([])
     const [data, setData] = useState({
         email: '',
         password: '',
@@ -25,10 +25,28 @@ const RegisterForm = () => {
         setErrors(validator(data, validatorConfig))
     }, [data])
 
+    // useEffect(() => {
+    //     // console.log('send request')
+    //     api.professions.fetchAll().then((data) => setProfessions(data))
+    //     api.qualities.fetchAll().then((data) => setQualities(data))
+    // }, [])
     useEffect(() => {
         // console.log('send request')
-        api.professions.fetchAll().then((data) => setProfessions(data))
-        api.qualities.fetchAll().then((data) => setQualities(data))
+        api.professions.fetchAll().then((data) => {
+            const professionList = Object.keys(data).map((professionName) => ({
+                label: data[professionName].name,
+                value: data[professionName]._id
+            }))
+            setProfessions(professionList)
+        })
+        api.qualities.fetchAll().then((data) => {
+            const qualitiesList = Object.keys(data).map((qualitiesName) => ({
+                label: data[qualitiesName].name,
+                value: data[qualitiesName]._id,
+                color: data[qualitiesName].color
+            }))
+            setQualities(qualitiesList)
+        })
     }, [])
 
     // useEffect(() => {
@@ -93,7 +111,39 @@ const RegisterForm = () => {
         e.preventDefault()
         const isValid = validate()
         if (!isValid) return
+        const { profession, qualities } = data
+
+        console.log({
+            ...data,
+            profession: getProfessionById(profession),
+            qualities: getQualities(qualities)
+        })
+
         console.log(data)
+    }
+
+    const getProfessionById = (id) => {
+        for (const prof of professions) {
+            if (prof.value === id) {
+                return { _id: prof.value, name: prof.label }
+            }
+        }
+    }
+
+    const getQualities = (elements) => {
+        const qualitiesArray = []
+        for (const elem of elements) {
+            for (const quality in qualities) {
+                if (elem.value === qualities[quality].value) {
+                    qualitiesArray.push({
+                        _id: qualities[quality].value,
+                        name: qualities[quality].label,
+                        color: qualities[quality].color
+                    })
+                }
+            }
+        }
+        return qualitiesArray
     }
 
     return (

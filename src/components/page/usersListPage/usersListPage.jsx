@@ -20,7 +20,7 @@ const UsersListPage = () => {
 
     useEffect(() => {
         // console.log('send request')
-        api.fetchAll().then((data) => setUsers(data))
+        api.users.fetchAll().then((data) => setUsers(data))
     }, [])
 
     const handleDelete = (userId) => {
@@ -101,8 +101,10 @@ const UsersListPage = () => {
             setSortBy(item)
         }
 
-        const handleUserSearch = ({ target }) => {
+        // const handleUserSearch = ({ target }) => {
+        const handleUserSearch = (target) => {
             // setSearchingUserName(prevState => prevState + target.value)
+            // console.log('target', target)
             // console.log('target.value', target.value)
             // console.log('searchingUserName prefer', searchingUserName)
             setSearchQuery(target.value)
@@ -136,7 +138,12 @@ const UsersListPage = () => {
                 )}
                 <div className="d-flex flex-column m-2">
                     <SearchStatus length={itemsCount}/>
-                    <TextField onChange={handleUserSearch} type='search' name='Search' label='' value={searchQuery}/>
+                    <TextField
+                        onChange={handleUserSearch}
+                        type='search'
+                        name='Search'
+                        label=''
+                        value={searchQuery}/>
                     {itemsCount > 0 && (
                         <UsersTable
                             users={usersCrop}

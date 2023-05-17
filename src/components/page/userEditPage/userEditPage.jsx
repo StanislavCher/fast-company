@@ -1,0 +1,33 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+// import RegisterForm from "../../ui/registerForm";
+// import LoginForm from "../../ui/loginForm";
+import UserEditForm from '../../ui/userEditForm'
+const UserEditPage = ({ userId }) => {
+    // return (
+    //     <h2>
+    //         UserEditPage for userId = {userId}
+    //     </h2>
+    // )
+    return (
+        <div className='container mt-5'>
+            <div className="row">
+                <div className="col-md-6 offset-md-3 shadow p-4">
+                    {
+                        <>
+                            <UserEditForm
+                                userId={userId}
+                            />
+                        </>
+                    }
+                </div>
+            </div>
+        </div>
+    )
+}
+
+UserEditPage.propTypes = {
+    userId: PropTypes.string.isRequired
+}
+
+export default UserEditPage

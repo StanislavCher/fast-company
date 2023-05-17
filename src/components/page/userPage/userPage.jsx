@@ -8,7 +8,7 @@ const UserPage = ({ userId }) => {
     const [userData, setUsers] = useState(undefined)
 
     useEffect(() => {
-        api.getById(userId).then((data) => setUsers(data))
+        api.users.getById(userId).then((data) => setUsers(data))
     }, [])
 
     const history = useHistory()
@@ -16,7 +16,13 @@ const UserPage = ({ userId }) => {
     // const { userId } = useParams()
 
     const handleClick = () => {
-        history.push('/users')
+        // history.push(`/users/${userId}/edit`)
+        history.push(history.location.pathname + `/edit`)
+    }
+
+    const handleClickAllUsers = () => {
+        // history.push(`/users/${userId}`)
+        history.push(`/users`)
     }
 
     if (userData) {
@@ -31,6 +37,10 @@ const UserPage = ({ userId }) => {
                 {/*    <Link className='nav-link' to={ '/users' } >Все пользователи</Link>*/}
                 {/* </button>*/}
                 <button onClick={ handleClick }>
+                    Редактировать
+                </button>
+                <span>   </span>
+                <button onClick={ handleClickAllUsers }>
                     Все пользователи
                 </button>
             </>
