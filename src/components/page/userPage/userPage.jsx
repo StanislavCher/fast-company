@@ -27,11 +27,18 @@ const UserPage = ({ userId }) => {
         history.push(history.location.pathname + `/edit`)
     }
 
-    const handleDelClick = (id) => {
+    const handleDelClick = (e) => {
         // api.comments.remove(id).then(r => console.log(r))
         // history.push(history.location.pathname)
-        console.log(id)
-        return null
+        // console.log(e)
+        // console.log(e.target.parentElement.id)
+        // console.log(e.target.name)
+        api.comments.remove(e.target.parentElement.id).then()
+        api.comments.fetchCommentsForUser(userId).then((data) => setComments(data))
+    }
+
+    const handleUpdateForm = () => {
+        api.comments.fetchCommentsForUser(userId).then((data) => setComments(data))
     }
 
     // const handleClickAllUsers = () => {
@@ -124,7 +131,9 @@ const UserPage = ({ userId }) => {
                                 {' '}
                                 <div className="card-body ">
                                     <h2>New comment</h2>
-                                    <CommentAddForm userId={userId}
+                                    <CommentAddForm
+                                        userId={userId}
+                                        updateForm={handleUpdateForm}
                                     />
                                     {/* //add comment*/}
                                 </div>
@@ -168,6 +177,8 @@ const UserPage = ({ userId }) => {
                                                                                 </p>
                                                                                 <button
                                                                                     className="btn btn-sm text-primary d-flex align-items-center"
+                                                                                    name={comment._id}
+                                                                                    id={comment._id}
                                                                                     onClick={handleDelClick}>
                                                                                     <i className="bi bi-x-lg"></i>
                                                                                 </button>

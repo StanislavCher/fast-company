@@ -4,9 +4,9 @@ import api from '../../api'
 import SelectField from '../common/form/selectField'
 import PropTypes from 'prop-types'
 import TextAreaField from '../common/form/textAreaField'
-import { useHistory } from 'react-router-dom'
+// import { useHistory } from 'react-router-dom'
 
-const CommentAddForm = ({ userId }) => {
+const CommentAddForm = ({ userId, updateForm }) => {
     const [users, setUsers] = useState([])
     const [data, setData] = useState({
         user: '',
@@ -15,7 +15,7 @@ const CommentAddForm = ({ userId }) => {
     const [errors, setErrors] = useState({})
     const [isLoading, setIsLoading] = useState(true)
 
-    const history = useHistory()
+    // const history = useHistory()
 
     useEffect(() => {
         setErrors(validator(data, validatorConfig))
@@ -116,11 +116,11 @@ const CommentAddForm = ({ userId }) => {
         // console.log('comment', text)
 
         api.comments.add({
-            // _id: '12345',
-            userId: page,
+            _id: Math.random().toString(36).substr(2, 9),
             pageId: user,
+            userId: page,
             content: text
-        }).then()
+        }).then(updateForm())
 
         // window.setTimeout(() => { history.push(`/users/${userId}`) }, 1000)
 
@@ -132,7 +132,7 @@ const CommentAddForm = ({ userId }) => {
         //     })
         // console.log('/users/data._id', `/users/${userId}`)
         // history.push(`/users/${userId}`)
-        history.push(`/users`)
+        // history.push(`/users`)
     }
 
     // if (data) {
@@ -182,6 +182,7 @@ const CommentAddForm = ({ userId }) => {
 }
 
 CommentAddForm.propTypes = {
-    userId: PropTypes.string.isRequired
+    userId: PropTypes.string.isRequired,
+    updateForm: PropTypes.func
 }
 export default CommentAddForm
