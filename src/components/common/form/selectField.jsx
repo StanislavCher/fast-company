@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const SelectField = ({ label, value, name, onChange, defaultOption, options, error }) => {
+    // console.log('options', options)
     const handleChange = ({ target }) => {
         onChange({ name: target.name, value: target.value })
     }
@@ -24,6 +25,7 @@ const SelectField = ({ label, value, name, onChange, defaultOption, options, err
     // console.log('options2', options)
     // console.log('optionsArray', optionsArray)
     // console.log('value', value)
+    // console.log('optionsArray', optionsArray)
     return (
         <div className='mb-4'>
             <label htmlFor={name} className="form-label">{label}</label>
