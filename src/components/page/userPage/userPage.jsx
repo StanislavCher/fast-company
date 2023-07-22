@@ -15,7 +15,11 @@ const UserPage = ({ userId }) => {
     const [userComments, setComments] = useState(undefined)
 
     useEffect(() => {
-        api.comments.fetchCommentsForUser(userId).then((data) => setComments(data))
+        api.comments.fetchCommentsForUser(userId).then((data) => {
+            // const sortDataByCommentDate = [...data].sort((a, b) => { return (a - b) })
+            // setComments(sortDataByCommentDate)
+            setComments(data)
+        })
     }, [])
 
     const [users, setUsers] = useState([])
