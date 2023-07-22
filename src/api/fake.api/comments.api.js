@@ -14,11 +14,53 @@ const comments = [
         created_at: '1633573058520'
     },
     {
-        _id: '67rdca3eeb7f6fgdaasd',
+        _id: '67rdca3eeb7f6fgdaasd1',
         pageId: '67rdca3eeb7f6fgeed471817',
         userId: '67rdca3eeb7f6fgeed471815',
         content: 'Lorem ipsum dolor and etc',
         created_at: '1633573058520'
+    },
+    {
+        _id: '67rdca3eeb7f6fgdaasd2',
+        pageId: '67rdca3eeb7f6fgeed471817',
+        userId: '67rdca3eeb7f6fgeed471815',
+        content: 'Lorem ipsum dolor and etc',
+        created_at: '1690054556702'
+    },
+    {
+        _id: '67rdca3eeb7f6fgdaasd3',
+        pageId: '67rdca3eeb7f6fgeed471817',
+        userId: '67rdca3eeb7f6fgeed471815',
+        content: 'Lorem ipsum dolor and etc',
+        created_at: '1690053956702'
+    },
+    {
+        _id: '67rdca3eeb7f6fgdaasd4',
+        pageId: '67rdca3eeb7f6fgeed471817',
+        userId: '67rdca3eeb7f6fgeed471815',
+        content: 'Lorem ipsum dolor and etc',
+        created_at: '1633486658520'
+    },
+    {
+        _id: '67rdca3eeb7f6fgdaasd5',
+        pageId: '67rdca3eeb7f6fgeed471817',
+        userId: '67rdca3eeb7f6fgeed471815',
+        content: 'Lorem ipsum dolor and etc',
+        created_at: '1690058156702'
+    },
+    {
+        _id: '67rdca3eeb7f6fgdaasd6',
+        pageId: '67rdca3eeb7f6fgeed471817',
+        userId: '67rdca3eeb7f6fgeed471815',
+        content: 'Lorem ipsum dolor and etc',
+        created_at: '1690054556702'
+    },
+    {
+        _id: '67rdca3eeb7f6fgdaasd7',
+        pageId: '67rdca3eeb7f6fgeed471817',
+        userId: '67rdca3eeb7f6fgeed471815',
+        content: 'Lorem ipsum dolor and etc',
+        created_at: '1690043756702'
     }
 ]
 if (!localStorage.getItem('comments')) {

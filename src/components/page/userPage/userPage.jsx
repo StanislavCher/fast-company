@@ -6,16 +6,41 @@ import PropTypes from 'prop-types'
 import CommentAddForm from '../../ui/commentAddForm'
 
 const UserPage = ({ userId }) => {
-    const [userData, setUsers] = useState(undefined)
+    const [userData, setUsersData] = useState(undefined)
 
     useEffect(() => {
-        api.users.getById(userId).then((data) => setUsers(data))
+        api.users.getById(userId).then((data) => setUsersData(data))
     }, [])
 
     const [userComments, setComments] = useState(undefined)
 
     useEffect(() => {
         api.comments.fetchCommentsForUser(userId).then((data) => setComments(data))
+    }, [])
+
+    const [users, setUsers] = useState([])
+
+    useEffect(() => {
+        // setIsLoading(true)
+        api.users.fetchAll().then((data) => {
+            // console.log('data', data)
+            const userList = data.map((userdata) => {
+                // console.log('userdata._id', userdata._id)
+                // console.log('userdata.name', userdata.name)
+                return ({
+                    value: userdata._id,
+                    label: userdata.name
+                })
+            })
+            setUsers(userList)
+            // console.log('users', users)
+            // setData((prevState) => ({
+            //     ...prevState,
+            //     ...data
+            // })
+            // )
+            // console.log('data', data)
+        })
     }, [])
 
     const history = useHistory()
@@ -45,6 +70,79 @@ const UserPage = ({ userId }) => {
     //     // history.push(`/users/${userId}`)
     //     history.push(`/users`)
     // }
+
+    const getTrueMonth = (month) => {
+        switch (month) {
+        case '0':
+            return 'january'
+        case '1':
+            return 'february'
+        case '2':
+            return 'march'
+        case '3':
+            return 'april'
+        case '4':
+            return 'may'
+        case '5':
+            return 'june'
+        case '6':
+            return 'july'
+        case '7':
+            return 'august'
+        case '8':
+            return 'september'
+        case '9':
+            return 'october'
+        case '10':
+            return 'november'
+        case '11':
+            return 'december'
+        default:
+            return 'unknown month'
+        }
+    }
+
+    const createDate = (ms) => {
+        console.log(ms)
+        console.log(typeof ms)
+        let msNumber
+        (typeof ms === 'string') ? msNumber = new Date(Number(ms)) : msNumber = ms
+        console.log(msNumber)
+
+        const deltaCommentTime = new Date() - msNumber
+        console.log(deltaCommentTime)
+
+        if (deltaCommentTime < 60 * 1000) return ' 1 минуту назад'
+        else if (deltaCommentTime < 5 * 60 * 1000) return ' 5 минут назад'
+        else if (deltaCommentTime < 10 * 60 * 1000) return ' 10 минут назад'
+        else if (deltaCommentTime < 30 * 60 * 1000) return ' 30 минут назад'
+        else if (deltaCommentTime < 24 * 60 * 60 * 1000) {
+            // console.log(msNumber)
+            // console.log((new Date(msNumber)))
+            // console.log((new Date(msNumber).getHours().toString()))
+            return (
+                ' ' + msNumber.getHours().toString() +
+                ' h ' +
+               msNumber.getMinutes().toString() +
+                ' mm '
+            )
+        } else if (deltaCommentTime < 31 * 24 * 60 * 60 * 1000) {
+            return (
+                ' ' + msNumber.getDay().toString() +
+                ' ' +
+                getTrueMonth(msNumber.getMonth().toString())
+            )
+        } else if (deltaCommentTime < 366 * 31 * 24 * 60 * 60 * 1000) {
+            return (
+                ' ' + msNumber.getDay().toString() +
+                ' ' +
+                getTrueMonth(msNumber.getMonth().toString()) +
+                ' ' +
+                msNumber.getFullYear().toString() +
+                    ''
+            )
+        }
+    }
 
     if (userData) {
         return (
@@ -133,6 +231,7 @@ const UserPage = ({ userId }) => {
                                     <h2>New comment</h2>
                                     <CommentAddForm
                                         userId={userId}
+                                        users={users}
                                         updateForm={handleUpdateForm}
                                     />
                                     {/* //add comment*/}
@@ -169,10 +268,10 @@ const UserPage = ({ userId }) => {
                                                                                 className="d-flex justify-content-between align-items-center">
                                                                                 <p className="mb-1 ">
                                                                                     {/* //User Name*/}
-                                                                                    {comment.userId}
+                                                                                    {users.find(user => user.value === comment.userId).label}
                                                                                     <span className="small">
                                                                                         {/* //Published Time*/}
-                                                                                        {comment.created_at}
+                                                                                        {createDate(comment.created_at)}
                                                                                     </span>
                                                                                 </p>
                                                                                 <button
