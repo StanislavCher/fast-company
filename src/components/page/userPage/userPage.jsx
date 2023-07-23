@@ -75,6 +75,11 @@ const UserPage = ({ userId }) => {
     //     history.push(`/users`)
     // }
 
+    const sortedComments = () => {
+        // console.log([...userComments])
+        return [...userComments].sort((a, b) => { return Number(a.created_at) - Number(b.created_at) })
+    }
+
     const getTrueMonth = (month) => {
         switch (month) {
         case '0':
@@ -107,14 +112,14 @@ const UserPage = ({ userId }) => {
     }
 
     const createDate = (ms) => {
-        console.log(ms)
-        console.log(typeof ms)
+        // console.log(ms)
+        // console.log(typeof ms)
         let msNumber
         (typeof ms === 'string') ? msNumber = new Date(Number(ms)) : msNumber = ms
-        console.log(msNumber)
+        // console.log(msNumber)
 
         const deltaCommentTime = new Date() - msNumber
-        console.log(deltaCommentTime)
+        // console.log(deltaCommentTime)
 
         if (deltaCommentTime < 60 * 1000) return ' 1 минуту назад'
         else if (deltaCommentTime < 5 * 60 * 1000) return ' 5 минут назад'
@@ -249,7 +254,7 @@ const UserPage = ({ userId }) => {
                                     {/* //comments*/}
                                     { userComments
                                         ? (userComments.length > 0)
-                                            ? userComments.map((comment) => {
+                                            ? sortedComments().map((comment) => {
                                                 return (
                                                     <div key={comment._id} className="bg-light card-body  mb-3">
                                                         <div className="row">
