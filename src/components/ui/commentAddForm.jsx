@@ -73,7 +73,7 @@ const CommentAddForm = ({ userId, updateForm, users }) => {
     const isValid = Object.keys(errors).length === 0
 
     const handleSubmit = (e) => {
-        console.log(data)
+        // console.log(data)
         e.preventDefault()
         const isValid = validate()
         if (!isValid) return
@@ -119,6 +119,7 @@ const CommentAddForm = ({ userId, updateForm, users }) => {
     // if (!isLoading) {
     return (
         <form onSubmit={handleSubmit}>
+            <h2>New comment</h2>
             <SelectField
                 onChange={handleChange}
                 defaultOption='Выберите пользователя'
