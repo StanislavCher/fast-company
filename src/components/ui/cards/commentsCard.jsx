@@ -5,7 +5,7 @@ import createDate from '../../../utils/date'
 const CommentsCard = ({ userComments, handleDelClick, users }) => {
     const sortedComments = () => {
         // console.log([...userComments])
-        return [...userComments].sort((a, b) => { return Number(a.created_at) - Number(b.created_at) })
+        return [...userComments].sort((a, b) => { return Number(b.created_at) - Number(a.created_at) })
     }
 
     return (

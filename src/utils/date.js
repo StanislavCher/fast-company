@@ -39,18 +39,18 @@ const createDate = (ms) => {
     const deltaCommentTime = new Date() - msNumber
     // console.log(deltaCommentTime)
 
-    if (deltaCommentTime < 60 * 1000) return ' 1 минуту назад'
-    else if (deltaCommentTime < 5 * 60 * 1000) return ' 5 минут назад'
-    else if (deltaCommentTime < 10 * 60 * 1000) return ' 10 минут назад'
-    else if (deltaCommentTime < 30 * 60 * 1000) return ' 30 минут назад'
+    if (deltaCommentTime < 60 * 1000) return ' - 1 минуту назад'
+    else if (deltaCommentTime < 5 * 60 * 1000) return ' - 5 минут назад'
+    else if (deltaCommentTime < 10 * 60 * 1000) return ' - 10 минут назад'
+    else if (deltaCommentTime < 30 * 60 * 1000) return ' - 30 минут назад'
     else if (deltaCommentTime < 24 * 60 * 60 * 1000) {
         // console.log(msNumber)
         // console.log((new Date(msNumber)))
         // console.log((new Date(msNumber).getHours().toString()))
         return (
             ((msNumber.getHours().toString().length === 1)
-                ? ' 0'
-                : ' ') + msNumber.getHours().toString() +
+                ? ' - 0'
+                : ' - ') + msNumber.getHours().toString() +
             ':' +
             ((msNumber.getMinutes().toString().length === 1)
                 ? '0'
@@ -58,13 +58,13 @@ const createDate = (ms) => {
         )
     } else if (deltaCommentTime < 31 * 24 * 60 * 60 * 1000) {
         return (
-            ' ' + msNumber.getDay().toString() +
+            ' - ' + msNumber.getDay().toString() +
             ' ' +
             getTrueMonth(msNumber.getMonth().toString())
         )
     } else if (deltaCommentTime < 366 * 31 * 24 * 60 * 60 * 1000) {
         return (
-            ' ' + msNumber.getDay().toString() +
+            ' - ' + msNumber.getDay().toString() +
             ' ' +
             getTrueMonth(msNumber.getMonth().toString()) +
             ' ' +

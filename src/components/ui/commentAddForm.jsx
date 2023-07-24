@@ -93,8 +93,8 @@ const CommentAddForm = ({ userId, updateForm, users }) => {
 
         api.comments.add({
             _id: Math.random().toString(36).substr(2, 9),
-            pageId: user,
-            userId: page,
+            pageId: page,
+            userId: user,
             content: text
         }).then(updateForm())
 
