@@ -8,6 +8,7 @@ import SearchStatus from '../../ui/searchStatus'
 import UsersTable from '../../ui/usersTable'
 import _ from 'lodash'
 import TextField from '../../common/form/textField'
+import { useUser } from '../../../hooks/useUsers'
 
 const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1)
@@ -16,27 +17,29 @@ const UsersListPage = () => {
     const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
     const [searchQuery, setSearchQuery] = useState('')
 
-    const [users, setUsers] = useState(undefined)
+    // const [users, setUsers] = useState(undefined)
+    const { users } = useUser()
+    // console.log(users)
 
-    useEffect(() => {
-        // console.log('send request')
-        api.users.fetchAll().then((data) => setUsers(data))
-    }, [])
+    // useEffect(() => {
+    //     // console.log('send request')
+    //     api.users.fetchAll().then((data) => setUsers(data))
+    // }, [])
 
     const handleDelete = (userId) => {
-        // console.log(userId)
-        setUsers(users.filter((user) => user._id !== userId))
+        console.log(userId)
+        // setUsers(users.filter((user) => user._id !== userId))
     }
 
     const handleToggleBookmark = (id) => {
-        setUsers(
-            users.map((user) => {
-                if (user._id === id) {
-                    return { ...user, bookmark: !user.bookmark }
-                }
-                return user
-            })
-        )
+        const newArray = users.map((user) => {
+            if (user._id === id) {
+                return { ...user, bookmark: !user.bookmark }
+            }
+            return user
+        })
+        // setUsers(newArray)
+        console.log(newArray)
     }
 
     useEffect(() => {

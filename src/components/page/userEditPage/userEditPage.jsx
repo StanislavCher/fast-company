@@ -18,6 +18,7 @@ const UserEditPage = ({ userId }) => {
     return (
         <div className='container mt-5'>
             <button className="btn btn-primary position-absolute top-20 end-20" onClick={ handleClickBack }>
+                <i className="bi bi-caret-left"></i>
                Назад
             </button>
             <div className="row">
