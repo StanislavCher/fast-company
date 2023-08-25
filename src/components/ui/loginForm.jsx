@@ -2,10 +2,15 @@ import React, { useState, useEffect } from 'react'
 import TextField from '../common/form/textField'
 import { validator } from '../../utils/validator'
 import CheckBoxField from '../common/form/checkBoxField'
+import { useHistory } from 'react-router-dom'
+import { useAuth } from '../../hooks/useAuth'
 // import * as yup from 'yup'
 // import { object, string, ValidationError } from 'yup'
 
 const LoginForm = () => {
+    const history = useHistory()
+    const { signIn } = useAuth()
+    // console.log(process.env)
     const [data, setData] = useState({
         email: '',
         password: '',
@@ -13,6 +18,7 @@ const LoginForm = () => {
     })
 
     const [errors, setErrors] = useState({})
+    const [enterError, setEnterError] = useState(null)
 
     // const validateScheme = object({
     //     password: string()
@@ -38,24 +44,11 @@ const LoginForm = () => {
         email: {
             isRequired: {
                 message: `email не должен быть пустым!`
-            },
-            isEmail: {
-                message: `email введен некорректно!`
             }
         },
         password: {
             isRequired: {
                 message: `пароль не должен быть пустым!`
-            },
-            isCapitalSymbol: {
-                message: `пароль должен содержать хотя бы 1 заглавную букву!`
-            },
-            isContainDigit: {
-                message: `пароль должен содержать хотя бы 1 цифру!`
-            },
-            isMinLen: {
-                message: `минимальная длина пароля 8 символов!`,
-                len: 8
             }
         }
     }
@@ -102,16 +95,25 @@ const LoginForm = () => {
                 [target.name]: target.value
             }
         })
+        setEnterError(null)
     }
 
     const isValid = Object.keys(errors).length === 0
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         // console.log(data)
         e.preventDefault()
         const isValid = validate()
         if (!isValid) return
-        console.log(data)
+        // console.log(data)
+        try {
+            await signIn(data)
+            history.push('/')
+        } catch (error) {
+            setEnterError(error.message)
+            // console.log(error)
+            // console.log(errors)
+        }
     }
 
     return (
@@ -143,9 +145,10 @@ const LoginForm = () => {
             >
                 Оставаться в системе
             </CheckBoxField>
+            {enterError && <p className='text-danger'>{enterError}</p>}
             <button
                 type='submit'
-                disabled={!isValid}
+                disabled={!isValid || enterError}
                 // disabled={true}
                 className='btn btn-primary w-100 mx-auto'
             >

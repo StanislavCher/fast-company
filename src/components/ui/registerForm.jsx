@@ -1,15 +1,36 @@
 import React, { useEffect, useState } from 'react'
 import { validator } from '../../utils/validator'
 import TextField from '../common/form/textField'
-import api from '../../api'
+// import api from '../../api'
 import SelectField from '../common/form/selectField'
 import RadioField from '../common/form/radioField'
 import MultiSelectField from '../common/form/multiSelectField'
 import CheckBoxField from '../common/form/checkBoxField'
+import { useProfession } from '../../hooks/useProfession'
+import { useQuality } from '../../hooks/useQuality'
+import { useAuth } from '../../hooks/useAuth'
+import { useHistory } from 'react-router-dom'
 
 const RegisterForm = () => {
-    const [professions, setProfessions] = useState([])
-    const [qualities, setQualities] = useState([])
+    const history = useHistory()
+    const { signUp } = useAuth()
+    // const [professions, setProfessions] = useState([])
+    const { profession } = useProfession()
+    // console.log(profession)
+    const professionList = profession.map((prof) => ({
+        label: prof.name,
+        value: prof._id
+    }))
+    // console.log(professionList)
+    // const [qualities, setQualities] = useState([])
+    const { qualities } = useQuality()
+    // console.log(qualities)
+    const qualitiesList = qualities.map((q) => ({
+        label: q.name,
+        value: q._id,
+        color: q.color
+    }))
+    // console.log(qualitiesList)
     const [data, setData] = useState({
         email: '',
         password: '',
@@ -27,31 +48,22 @@ const RegisterForm = () => {
 
     // useEffect(() => {
     //     // console.log('send request')
-    //     api.professions.fetchAll().then((data) => setProfessions(data))
-    //     api.qualities.fetchAll().then((data) => setQualities(data))
+    //     api.professions.fetchAll().then((data) => {
+    //         const professionList = Object.keys(data).map((professionName) => ({
+    //             label: data[professionName].name,
+    //             value: data[professionName]._id
+    //         }))
+    //         setProfessions(professionList)
+    //     })
+    //     api.qualities.fetchAll().then((data) => {
+    //         const qualitiesList = Object.keys(data).map((qualitiesName) => ({
+    //             label: data[qualitiesName].name,
+    //             value: data[qualitiesName]._id,
+    //             color: data[qualitiesName].color
+    //         }))
+    //         setQualities(qualitiesList)
+    //     })
     // }, [])
-    useEffect(() => {
-        // console.log('send request')
-        api.professions.fetchAll().then((data) => {
-            const professionList = Object.keys(data).map((professionName) => ({
-                label: data[professionName].name,
-                value: data[professionName]._id
-            }))
-            setProfessions(professionList)
-        })
-        api.qualities.fetchAll().then((data) => {
-            const qualitiesList = Object.keys(data).map((qualitiesName) => ({
-                label: data[qualitiesName].name,
-                value: data[qualitiesName]._id,
-                color: data[qualitiesName].color
-            }))
-            setQualities(qualitiesList)
-        })
-    }, [])
-
-    // useEffect(() => {
-    //     console.log(professions)
-    // }, [professions])
 
     const validatorConfig = {
         email: {
@@ -106,45 +118,58 @@ const RegisterForm = () => {
 
     const isValid = Object.keys(errors).length === 0
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         // console.log(data)
         e.preventDefault()
         const isValid = validate()
         if (!isValid) return
-        const { profession, qualities } = data
-
-        console.log({
+        const newData = {
             ...data,
-            profession: getProfessionById(profession),
-            qualities: getQualities(qualities)
-        })
-
-        console.log(data)
-    }
-
-    const getProfessionById = (id) => {
-        for (const prof of professions) {
-            if (prof.value === id) {
-                return { _id: prof.value, name: prof.label }
-            }
+            qualities: data.qualities.map(q => q.value)
+        }
+        // const { profession, qualities } = data
+        //
+        // console.log({
+        //     ...data,
+        //     profession: getProfessionById(profession),
+        //     qualities: getQualities(qualities)
+        // })
+        //
+        // console.log(data)
+        // console.log(newData)
+        try {
+            await signUp(newData)
+            history.push('/')
+        } catch (error) {
+            setErrors(error)
+            // console.log(error)
+            // console.log(errors)
         }
     }
 
-    const getQualities = (elements) => {
-        const qualitiesArray = []
-        for (const elem of elements) {
-            for (const quality in qualities) {
-                if (elem.value === qualities[quality].value) {
-                    qualitiesArray.push({
-                        _id: qualities[quality].value,
-                        name: qualities[quality].label,
-                        color: qualities[quality].color
-                    })
-                }
-            }
-        }
-        return qualitiesArray
-    }
+    // const getProfessionById = (id) => {
+    //     for (const prof of profession) {
+    //         if (prof.value === id) {
+    //             return { _id: prof.value, name: prof.label }
+    //         }
+    //     }
+    // }
+
+    // const getQualities = (elements) => {
+    //     const qualitiesArray = []
+    //     for (const elem of elements) {
+    //         for (const quality in qualities) {
+    //             if (elem.value === qualities[quality].value) {
+    //                 qualitiesArray.push({
+    //                     _id: qualities[quality].value,
+    //                     name: qualities[quality].label,
+    //                     color: qualities[quality].color
+    //                 })
+    //             }
+    //         }
+    //     }
+    //     return qualitiesArray
+    // }
 
     return (
         <form onSubmit={handleSubmit}>
@@ -167,7 +192,7 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 defaultOption='Choose...'
                 name='profession'
-                options={professions}
+                options={professionList}
                 label='Выберите Вашу профессию'
                 error={errors.profession}
                 value={data.profession}
@@ -183,7 +208,7 @@ const RegisterForm = () => {
                 label='Выберите Ваш пол'
             />
             <MultiSelectField
-                options={qualities}
+                options={qualitiesList}
                 onChange={handleChange}
                 defaultValue={data.qualities}
                 name='qualities'
