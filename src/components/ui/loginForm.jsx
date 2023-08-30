@@ -9,6 +9,7 @@ import { useAuth } from '../../hooks/useAuth'
 
 const LoginForm = () => {
     const history = useHistory()
+    // console.log(history.location.state.from.pathname)
     const { signIn } = useAuth()
     // console.log(process.env)
     const [data, setData] = useState({
@@ -108,7 +109,10 @@ const LoginForm = () => {
         // console.log(data)
         try {
             await signIn(data)
-            history.push('/')
+            history.push(
+                history.location.state
+                    ? history.location.state.from.pathname
+                    : '/')
         } catch (error) {
             setEnterError(error.message)
             // console.log(error)

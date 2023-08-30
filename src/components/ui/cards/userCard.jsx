@@ -1,22 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useAuth } from '../../../hooks/useAuth'
 
-const UserCard = ({ handleClick, userName, userProfession, userRate }) => {
+const UserCard = ({ handleClick, userName, userProfession, userRate, userImage, userId }) => {
+    const { currentUser } = useAuth()
     return (
         <>
-            <button className="position-absolute top-0 end-0 btn btn-light btn-sm"
+            {(currentUser._id === userId) && (<button className="position-absolute top-0 end-0 btn btn-light btn-sm"
                 onClick={ handleClick }
             >
                 <i className="bi bi-gear"></i>
-            </button>
+            </button>)}
             <div
                 className="d-flex flex-column align-items-center text-center position-relative">
                 <img
-                    src={`https://avatars.dicebear.com/api/avataaars/${(
-                        Math.random() + 1
-                    )
-                        .toString(36)
-                        .substring(7)}.svg`}
+                    src={userImage}
+                    // src={`https://avatars.dicebear.com/api/avataaars/${(
+                    //     Math.random() + 1
+                    // )
+                    //     .toString(36)
+                    //     .substring(7)}.svg`}
                     className="rounded-circle shadow-1-strong me-3"
                     alt="avatar"
                     width="65"
@@ -40,7 +43,9 @@ UserCard.propTypes = {
     handleClick: PropTypes.func,
     userName: PropTypes.string,
     userProfession: PropTypes.string,
-    userRate: PropTypes.number
+    userRate: PropTypes.number,
+    userImage: PropTypes.string,
+    userId: PropTypes.string
 }
 
 export default UserCard

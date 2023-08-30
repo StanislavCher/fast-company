@@ -2,6 +2,8 @@ import axios from 'axios'
 // import logger from './log.service'
 import { toast } from 'react-toastify'
 import configFile from '../config.json'
+import localStorageService from './localStorage.service'
+import { httpAuth } from '../hooks/useAuth'
 
 const http = axios.create({
     baseURL: configFile.apiEndpoint
@@ -10,7 +12,7 @@ const http = axios.create({
 // axios.defaults.baseURL = configFile.apiEndpoint
 
 http.interceptors.request.use(
-    function (config) {
+    async function (config) {
         if (configFile.isFirebase) {
             const containSlash = /\/$/gi.test(config.url)
             // config.url = 'profession/'
@@ -19,6 +21,25 @@ http.interceptors.request.use(
             // console.log(config.url)
             // console.log(axios.defaults.baseURL)
             // console.log(config)
+            const expiresDate = localStorageService.getTokenExpiresDate()
+            const refreshToken = localStorageService.getRefreshToken()
+            if (refreshToken && expiresDate < Date.now()) {
+                const { data } = await httpAuth.post('token', {
+                    grant_type: 'refresh_token',
+                    refresh_token: refreshToken
+                })
+                // console.log(data)
+                localStorageService.setTokens({
+                    refreshToken: data.refresh_token,
+                    idToken: data.id_token,
+                    expiresIn: data.expires_in,
+                    localId: data.user_id
+                })
+            }
+            const authToken = localStorageService.getAccessToken()
+            if (authToken) {
+                config.params = { ...config.params, auth: authToken }
+            }
         }
         return config
     }, function (error) {
@@ -58,14 +79,14 @@ function transformData(data) {
     // console.log('mockData1', mockData1)
 
     // console.log('Object.keys(data)', Object.keys(data))
-    return data
-        ? Object.keys(data).map((key) => {
+    return data && !data._id
+        ? Object.keys(data).map((key) => ({
             // console.log('data', data)
             // console.log('key', key)
             // console.log('data[key]', data[key])
-            return data[key]
-        })
-        : []
+            ...data[key]
+        }))
+        : data
 }
 
 http.interceptors.response.use(

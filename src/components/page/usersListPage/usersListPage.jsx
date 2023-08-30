@@ -3,16 +3,20 @@ import Pagination from '../../common/pagination'
 import { paginate } from '../../../utils/paginate'
 import PropTypes from 'prop-types'
 import GroupList from '../../common/groupList'
-import api from '../../../api'
+// import api from '../../../api'
 import SearchStatus from '../../ui/searchStatus'
 import UsersTable from '../../ui/usersTable'
 import _ from 'lodash'
 import TextField from '../../common/form/textField'
 import { useUser } from '../../../hooks/useUsers'
+import { useProfession } from '../../../hooks/useProfession'
+import { useAuth } from '../../../hooks/useAuth'
 
 const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1)
-    const [professions, setProfessions] = useState(undefined)
+    const { currentUser } = useAuth()
+    const { isLoading: professionsLoading, profession: professions } = useProfession()
+    // const [professions, setProfessions] = useState(undefined)
     const [selectedProf, setSelectedProf] = useState(undefined)
     const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
     const [searchQuery, setSearchQuery] = useState('')
@@ -42,10 +46,10 @@ const UsersListPage = () => {
         console.log(newArray)
     }
 
-    useEffect(() => {
-        // console.log('send request')
-        api.professions.fetchAll().then((data) => setProfessions(data))
-    }, [])
+    // useEffect(() => {
+    //     // console.log('send request')
+    //     api.professions.fetchAll().then((data) => setProfessions(data))
+    // }, [])
 
     useEffect(() => {
         setCurrentPage(1)
@@ -76,17 +80,20 @@ const UsersListPage = () => {
         // } else {
         //     selectedUsers = users.filter(user => user.name.toLowerCase().includes(searchingUserName.toLowerCase()))
         // }
-
-        const selectedUsers = searchQuery
-            ? users.filter(user => user.name.toLowerCase().includes(searchQuery.toLowerCase()))
-            : selectedProf
-                ? users.filter((user) => {
-                    return (
-                        JSON.stringify(user.profession) ===
-                        JSON.stringify(selectedProf)
-                    )
-                })
-                : users
+        function filterUsers(data) {
+            const selectedUsers = searchQuery
+                ? data.filter(user => user.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                : selectedProf
+                    ? data.filter((user) => {
+                        return (
+                            JSON.stringify(user.profession) ===
+                            JSON.stringify(selectedProf)
+                        )
+                    })
+                    : data
+            return selectedUsers.filter((user) => user._id !== currentUser._id)
+        }
+        const selectedUsers = filterUsers(users)
 
         const itemsCount = users ? selectedUsers.length : 0
 
@@ -124,7 +131,7 @@ const UsersListPage = () => {
 
         return (
             <div className="d-flex m-2">
-                {professions && (
+                {!professionsLoading && professions && (
                     <div className="d-flex flex-column m-2">
                         <GroupList
                             items={professions}

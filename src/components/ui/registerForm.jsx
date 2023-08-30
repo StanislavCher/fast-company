@@ -36,6 +36,7 @@ const RegisterForm = () => {
         password: '',
         profession: '',
         sex: 'male',
+        name: '',
         qualities: [],
         licence: false
     })
@@ -72,6 +73,15 @@ const RegisterForm = () => {
             },
             isEmail: {
                 message: `email введен некорректно!`
+            }
+        },
+        name: {
+            isRequired: {
+                message: `имя не должно быть пустым!`
+            },
+            isMinLen: {
+                message: `минимальная длина имени 3 символа!`,
+                len: 3
             }
         },
         password: {
@@ -174,14 +184,21 @@ const RegisterForm = () => {
     return (
         <form onSubmit={handleSubmit}>
             <TextField
-                label='Enter email'
+                label='Введите электронную почту'
                 name='email'
                 value={data.email}
                 onChange={handleChange}
                 error={errors.email}
             />
             <TextField
-                label='Enter password'
+                label='Введите имя'
+                name='name'
+                value={data.name}
+                onChange={handleChange}
+                error={errors.name}
+            />
+            <TextField
+                label='Введите пароль'
                 type='password'
                 name='password'
                 value={data.password}
@@ -190,7 +207,7 @@ const RegisterForm = () => {
             />
             <SelectField
                 onChange={handleChange}
-                defaultOption='Choose...'
+                defaultOption='Выберите...'
                 name='profession'
                 options={professionList}
                 label='Выберите Вашу профессию'

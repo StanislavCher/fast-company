@@ -8,48 +8,77 @@ import UserCard from '../../ui/cards/userCard'
 import QualitiesCard from '../../ui/cards/qualitiesCard'
 import MeetingsCard from '../../ui/cards/meetingsCard'
 import CommentsCard from '../../ui/cards/commentsCard'
+import { useUser } from '../../../hooks/useUsers'
+import { useProfession } from '../../../hooks/useProfession'
+import { CommentsProvider } from '../../../hooks/useComments'
 
 const UserPage = ({ userId }) => {
-    const [userData, setUsersData] = useState(undefined)
-
+    const { users, getUserById } = useUser()
+    // const { getUserById } = useUser()
+    const userData = getUserById(userId)
+    // console.log('userData', userData)
+    const userList = users.map((userdata) => {
+        // console.log('userdata._id', userdata._id)
+        // console.log('userdata.name', userdata.name)
+        return ({
+            value: userdata._id,
+            label: userdata.name
+        })
+    })
+    // console.log('userList', userList)
+    const { isLoading: professionsLoading, getProfession } = useProfession()
+    const [profession, setProfession] = useState('')
     useEffect(() => {
-        api.users.getById(userId).then((data) => setUsersData(data))
-    }, [])
+        if (!professionsLoading) {
+            setProfession(getProfession(userData.profession).name)
+            // console.log('render')
+        }
+    }, [userData])
+
+    // console.log('getProfession', getProfession)
+
+    // console.log('professionName', professionName)
+    // const [userData, setUsersData] = useState(undefined)
+    //
+    // useEffect(() => {
+    //     api.users.getById(userId).then((data) => setUsersData(data))
+    // }, [])
 
     const [userComments, setComments] = useState(undefined)
-
+    // console.log(userComments)
+    //
     useEffect(() => {
         api.comments.fetchCommentsForUser(userId).then((data) => {
             // const sortDataByCommentDate = [...data].sort((a, b) => { return (a - b) })
             // setComments(sortDataByCommentDate)
             setComments(data)
         })
-    }, [])
+    }, [userId])
 
-    const [users, setUsers] = useState([])
+    // const [users, setUsers] = useState([])
 
-    useEffect(() => {
-        // setIsLoading(true)
-        api.users.fetchAll().then((data) => {
-            // console.log('data', data)
-            const userList = data.map((userdata) => {
-                // console.log('userdata._id', userdata._id)
-                // console.log('userdata.name', userdata.name)
-                return ({
-                    value: userdata._id,
-                    label: userdata.name
-                })
-            })
-            setUsers(userList)
-            // console.log('users', users)
-            // setData((prevState) => ({
-            //     ...prevState,
-            //     ...data
-            // })
-            // )
-            // console.log('data', data)
-        })
-    }, [])
+    // useEffect(() => {
+    //     // setIsLoading(true)
+    //     api.users.fetchAll().then((data) => {
+    //         // console.log('data', data)
+    //         const userList = data.map((userdata) => {
+    //             // console.log('userdata._id', userdata._id)
+    //             // console.log('userdata.name', userdata.name)
+    //             return ({
+    //                 value: userdata._id,
+    //                 label: userdata.name
+    //             })
+    //         })
+    //         setUsers(userList)
+    //         // console.log('users', users)
+    //         // setData((prevState) => ({
+    //         //     ...prevState,
+    //         //     ...data
+    //         // })
+    //         // )
+    //         // console.log('data', data)
+    //     })
+    // }, [])
 
     const history = useHistory()
 
@@ -87,14 +116,18 @@ const UserPage = ({ userId }) => {
                         {/* // Users - left side*/}
                         <div className="col-md-4 mb-3">
                             {/* User Card*/}
-                            <Card>
-                                <UserCard
-                                    handleClick={handleClick}
-                                    userName={userData.name}
-                                    userProfession={userData.profession.name}
-                                    userRate={userData.rate}
-                                />
-                            </Card>
+                            {(!professionsLoading && profession)
+                                ? (<Card>
+                                    <UserCard
+                                        handleClick={handleClick}
+                                        userName={userData.name}
+                                        userProfession={profession}
+                                        userRate={userData.rate}
+                                        userImage={userData.image}
+                                        userId={userData._id}
+                                    />
+                                </Card>)
+                                : 'Loading...'}
                             {/* Qualities Card*/}
                             <Card>
                                 <QualitiesCard
@@ -111,23 +144,25 @@ const UserPage = ({ userId }) => {
                         {/* // Comments - right side*/}
                         <div className="col-md-8">
                             {/* // Add comment form*/}
-                            <Card>
-                                <CommentAddForm
-                                    userId={userId}
-                                    users={users}
-                                    updateForm={handleUpdateForm}
-                                />
-                            </Card>
-                            {/* // Display comments*/}
-                            { (userComments.length > 0)
-                                ? (<Card>
-                                    <CommentsCard
-                                        handleDelClick={handleDelClick}
-                                        users={users}
-                                        userComments={userComments}
+                            <CommentsProvider>
+                                <Card>
+                                    <CommentAddForm
+                                        userId={userId}
+                                        users={userList}
+                                        updateForm={handleUpdateForm}
                                     />
-                                </Card>)
-                                : ''}
+                                </Card>
+                                {/* // Display comments*/}
+                                { userComments && (userComments.length > 0)
+                                    ? (<Card>
+                                        <CommentsCard
+                                            handleDelClick={handleDelClick}
+                                            users={userList}
+                                            userComments={userComments}
+                                        />
+                                    </Card>)
+                                    : ''}
+                            </CommentsProvider>
                         </div>
                     </div>
                 </div>
