@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { validator } from '../../utils/validator'
-import api from '../../api'
-import SelectField from '../common/form/selectField'
+// import api from '../../api'
+// import SelectField from '../common/form/selectField'
 import PropTypes from 'prop-types'
 import TextAreaField from '../common/form/textAreaField'
+import { useComments } from '../../hooks/useComments'
 // import { useHistory } from 'react-router-dom'
 
-const CommentAddForm = ({ userId, updateForm, users }) => {
+const CommentAddForm = ({ userId, updateForm }) => {
+    const { createComment } = useComments()
     const [data, setData] = useState({
-        user: '',
-        text: ''
+        content: ''
     })
     const [errors, setErrors] = useState({})
     // const [isLoading, setIsLoading] = useState(true)
@@ -37,12 +38,12 @@ const CommentAddForm = ({ userId, updateForm, users }) => {
     // }
 
     const validatorConfig = {
-        user: {
-            isRequired: {
-                message: `обязательно выберите пользователя!`
-            }
-        },
-        text: {
+        // user: {
+        //     isRequired: {
+        //         message: `обязательно выберите пользователя!`
+        //     }
+        // },
+        content: {
             isRequired: {
                 message: `обязательно введите текст комментария!`
             }
@@ -79,8 +80,8 @@ const CommentAddForm = ({ userId, updateForm, users }) => {
         if (!isValid) return
         // console.log(e.target[1].name)
         // console.log(e.target[1].value)
-        const { user, text } = data
-        const page = userId
+        const { content } = data
+        const pageId = userId
 
         // console.log({
         //     ...data,
@@ -91,12 +92,14 @@ const CommentAddForm = ({ userId, updateForm, users }) => {
         // console.log('user', user)
         // console.log('comment', text)
 
-        api.comments.add({
-            _id: Math.random().toString(36).substr(2, 9),
-            pageId: page,
-            userId: user,
-            content: text
-        }).then(updateForm())
+        createComment({ content, pageId })
+
+        // api.comments.add({
+        //     _id: Math.random().toString(36).substr(2, 9),
+        //     pageId: page,
+        //     userId: user,
+        //     content: text
+        // }).then(updateForm())
 
         // window.setTimeout(() => { history.push(`/users/${userId}`) }, 1000)
 
@@ -110,8 +113,7 @@ const CommentAddForm = ({ userId, updateForm, users }) => {
         // history.push(`/users/${userId}`)
         // history.push(`/users`)
         setData({
-            user: '',
-            text: ''
+            content: ''
         })
     }
 
@@ -120,22 +122,22 @@ const CommentAddForm = ({ userId, updateForm, users }) => {
     return (
         <form onSubmit={handleSubmit}>
             <h2>New comment</h2>
-            <SelectField
-                onChange={handleChange}
-                defaultOption='Выберите пользователя'
-                name='user'
-                options={users}
-                label='Выберите пользователя'
-                error={errors.user}
-                value={data.user}
-            />
+            {/* <SelectField*/}
+            {/*    onChange={handleChange}*/}
+            {/*    defaultOption='Выберите пользователя'*/}
+            {/*    name='user'*/}
+            {/*    options={users}*/}
+            {/*    label='Выберите пользователя'*/}
+            {/*    error={errors.user}*/}
+            {/*    value={data.user}*/}
+            {/* />*/}
             <TextAreaField
                 onChange={handleChange}
-                name='text'
+                name='content'
                 label='Сообщение'
                 rows='3'
-                error={errors.text}
-                value={data.text}
+                error={errors.content}
+                value={data.content}
             />
             {/* <div className="form-group">*/}
             {/*    <label htmlFor="comment">Сообщение</label>*/}

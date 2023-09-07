@@ -39,11 +39,11 @@ export const QualityProvider = ({ children }) => {
         } catch (error) {
             errorCatcher(error)
         }
-        function errorCatcher(error) {
-            // console.log('My error', error)
-            const { message } = error.response.data
-            setErrors(message)
-        }
+    }
+    function errorCatcher(error) {
+        // console.log('My error', error)
+        const { message } = error.response.data
+        setErrors(message)
     }
 
     return (

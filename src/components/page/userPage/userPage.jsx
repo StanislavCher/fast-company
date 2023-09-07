@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import api from '../../../api'
+// import api from '../../../api'
 import PropTypes from 'prop-types'
 import CommentAddForm from '../../ui/commentAddForm'
 import Card from '../../ui/cards/card'
@@ -22,7 +22,8 @@ const UserPage = ({ userId }) => {
         // console.log('userdata.name', userdata.name)
         return ({
             value: userdata._id,
-            label: userdata.name
+            label: userdata.name,
+            image: userdata.image
         })
     })
     // console.log('userList', userList)
@@ -44,16 +45,19 @@ const UserPage = ({ userId }) => {
     //     api.users.getById(userId).then((data) => setUsersData(data))
     // }, [])
 
-    const [userComments, setComments] = useState(undefined)
-    // console.log(userComments)
+    // const [userComments, setComments] = useState(undefined)
+
+    // const { createComment } = useComments()
+    // const commentsForUser = createComment(userId).then((data) => setComments(data))
+    // console.log(commentsForUser)
     //
-    useEffect(() => {
-        api.comments.fetchCommentsForUser(userId).then((data) => {
-            // const sortDataByCommentDate = [...data].sort((a, b) => { return (a - b) })
-            // setComments(sortDataByCommentDate)
-            setComments(data)
-        })
-    }, [userId])
+    // useEffect(() => {
+    // api.comments.fetchCommentsForUser(userId).then((data) => {
+    //     // const sortDataByCommentDate = [...data].sort((a, b) => { return (a - b) })
+    //     // setComments(sortDataByCommentDate)
+    //     setComments(data)
+    // })
+    // }, [userId])
 
     // const [users, setUsers] = useState([])
 
@@ -89,18 +93,18 @@ const UserPage = ({ userId }) => {
         history.push(history.location.pathname + `/edit`)
     }
 
-    const handleDelClick = (e) => {
-        // api.comments.remove(id).then(r => console.log(r))
-        // history.push(history.location.pathname)
-        // console.log(e)
-        // console.log(e.target.parentElement.id)
-        // console.log(e.target.name)
-        api.comments.remove(e.target.parentElement.id).then()
-        api.comments.fetchCommentsForUser(userId).then((data) => setComments(data))
-    }
+    // const handleDelClick = (e) => {
+    //     // api.comments.remove(id).then(r => console.log(r))
+    //     // history.push(history.location.pathname)
+    //     // console.log(e)
+    //     // console.log(e.target.parentElement.id)
+    //     // console.log(e.target.name)
+    //     api.comments.remove(e.target.parentElement.id).then()
+    //     // api.comments.fetchCommentsForUser(userId).then((data) => setComments(data))
+    // }
 
     const handleUpdateForm = () => {
-        api.comments.fetchCommentsForUser(userId).then((data) => setComments(data))
+        // api.comments.fetchCommentsForUser(userId).then((data) => setComments(data))
     }
 
     // const handleClickAllUsers = () => {
@@ -148,20 +152,22 @@ const UserPage = ({ userId }) => {
                                 <Card>
                                     <CommentAddForm
                                         userId={userId}
-                                        users={userList}
+                                        // users={userList}
                                         updateForm={handleUpdateForm}
                                     />
                                 </Card>
                                 {/* // Display comments*/}
-                                { userComments && (userComments.length > 0)
-                                    ? (<Card>
-                                        <CommentsCard
-                                            handleDelClick={handleDelClick}
-                                            users={userList}
-                                            userComments={userComments}
-                                        />
-                                    </Card>)
-                                    : ''}
+                                {/* { userComments && (userComments?.length > 0)*/}
+                                {/*    ? (<Card>*/}
+                                <CommentsCard
+                                    // handleDelClick={handleDelClick}
+                                    users={userList}
+                                    user={userData}
+                                    // userComments={userComments}
+                                    // userId={userId}
+                                />
+                                {/* </Card>)*/}
+                                {/* : ''}*/}
                             </CommentsProvider>
                         </div>
                     </div>

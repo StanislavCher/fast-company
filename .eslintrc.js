@@ -21,7 +21,7 @@ module.exports = {
             'error',
             { anonymous: 'always', named: 'never' }
         ],
-        quotes: ['error', 'single', { allowTemplateLiterals: true }],
+        quotes: ['error', 'single', { allowTemplateLiterals: true, avoidEscape: true }],
         'spaced-comment': ['error', 'always', { markers: ['/'] }]
     }
 }
