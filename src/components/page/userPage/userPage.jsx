@@ -13,9 +13,23 @@ import { useProfession } from '../../../hooks/useProfession'
 import { CommentsProvider } from '../../../hooks/useComments'
 
 const UserPage = ({ userId }) => {
-    const { users, getUserById } = useUser()
+    // console.log('render')
+    const { isLoading: usersLoading, users, getUserById } = useUser()
+    // const { isLoading: usersLoading, users, getUserById, getUsers } = useUser()
+    // useEffect(() => {
+    //     getUsers()
+    // }, [])
     // const { getUserById } = useUser()
     const userData = getUserById(userId)
+    // console.log('userData', userData)
+    // const [userData, setUserData] = useState([])
+    const [isLoading, setLoading] = useState(true)
+    useEffect(() => {
+        if (!usersLoading) {
+            setLoading(false)
+        }
+    }, [usersLoading])
+    // console.log('users', users)
     // console.log('userData', userData)
     const userList = users.map((userdata) => {
         // console.log('userdata._id', userdata._id)
@@ -34,55 +48,7 @@ const UserPage = ({ userId }) => {
             setProfession(getProfession(userData.profession).name)
             // console.log('render')
         }
-    }, [userData])
-
-    // console.log('getProfession', getProfession)
-
-    // console.log('professionName', professionName)
-    // const [userData, setUsersData] = useState(undefined)
-    //
-    // useEffect(() => {
-    //     api.users.getById(userId).then((data) => setUsersData(data))
-    // }, [])
-
-    // const [userComments, setComments] = useState(undefined)
-
-    // const { createComment } = useComments()
-    // const commentsForUser = createComment(userId).then((data) => setComments(data))
-    // console.log(commentsForUser)
-    //
-    // useEffect(() => {
-    // api.comments.fetchCommentsForUser(userId).then((data) => {
-    //     // const sortDataByCommentDate = [...data].sort((a, b) => { return (a - b) })
-    //     // setComments(sortDataByCommentDate)
-    //     setComments(data)
-    // })
-    // }, [userId])
-
-    // const [users, setUsers] = useState([])
-
-    // useEffect(() => {
-    //     // setIsLoading(true)
-    //     api.users.fetchAll().then((data) => {
-    //         // console.log('data', data)
-    //         const userList = data.map((userdata) => {
-    //             // console.log('userdata._id', userdata._id)
-    //             // console.log('userdata.name', userdata.name)
-    //             return ({
-    //                 value: userdata._id,
-    //                 label: userdata.name
-    //             })
-    //         })
-    //         setUsers(userList)
-    //         // console.log('users', users)
-    //         // setData((prevState) => ({
-    //         //     ...prevState,
-    //         //     ...data
-    //         // })
-    //         // )
-    //         // console.log('data', data)
-    //     })
-    // }, [])
+    }, [professionsLoading, userData])
 
     const history = useHistory()
 
@@ -112,7 +78,7 @@ const UserPage = ({ userId }) => {
     //     history.push(`/users`)
     // }
 
-    if (userData) {
+    if (!isLoading) {
         return (
             <>
                 <div className="container">

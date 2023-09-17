@@ -7,12 +7,12 @@ import { useAuth } from '../../../hooks/useAuth'
 // import api from "../../../api";
 
 const CommentsCard = ({ user, users }) => {
-    console.log('users', users)
-    console.log('user', user)
+    // console.log('users', users)
+    // console.log('user', user)
     const { comments, removeComment } = useComments()
     const { currentUser } = useAuth()
-    console.log('currentUser', currentUser)
-    console.log('comments', comments)
+    // console.log('currentUser', currentUser)
+    // console.log('comments', comments)
     // const commentsForUser = createComment(userId).then((data) => { userComments = data })
     // console.log(commentsForUser)
     // console.log(comments)

@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import userService from '../services/user.service'
 import { toast } from 'react-toastify'
+import { useAuth } from './useAuth'
 
 const UserContext = React.createContext()
 
@@ -14,6 +15,8 @@ const UserProvider = ({ children }) => {
     const [isLoading, setLoading] = useState(true)
     const [error, setError] = useState(null)
 
+    const { currentUser } = useAuth()
+
     useEffect(() => {
         getUsers()
     }, [])
@@ -24,6 +27,24 @@ const UserProvider = ({ children }) => {
             setError(null)
         }
     }, [error])
+
+    useEffect(() => {
+        // console.log('currentUser', currentUser)
+        // console.log('users', users)
+        if (!isLoading) {
+            const newUsers = users.map((user) => {
+                if (user._id !== currentUser._id) {
+                    return user
+                } else {
+                    return currentUser
+                }
+            })
+            // console.log('newUsers', newUsers)
+            setUsers(newUsers)
+            // console.log('users1', users)
+        }
+    }, [currentUser, isLoading])
+
     async function getUsers() {
         try {
             const { content } = await userService.get()
@@ -42,6 +63,7 @@ const UserProvider = ({ children }) => {
             return user._id === id
         })
     }
+
     function errorCatcher(error) {
         // console.log(error)
         const { message } = error.response.data
@@ -50,7 +72,7 @@ const UserProvider = ({ children }) => {
     }
 
     return (
-        <UserContext.Provider value={ { users, getUserById } }>
+        <UserContext.Provider value={ { users, getUserById, getUsers, isLoading } }>
             {!isLoading ? children : 'Loading...'}
         </UserContext.Provider>
     )

@@ -47,7 +47,7 @@ http.interceptors.request.use(
     }
 )
 
-function transformData(data) {
+function transformData(data, method) {
     // const mockData = {
     //     '67rdca3eeb7f6fgeed471198': {
     //         _id: '67rdca3eeb7f6fgeed471198',
@@ -79,21 +79,26 @@ function transformData(data) {
     // console.log('mockData1', mockData1)
 
     // console.log('Object.keys(data)', Object.keys(data))
-    return data && !data._id
-        ? Object.keys(data).map((key) => ({
-            // console.log('data', data)
-            // console.log('key', key)
-            // console.log('data[key]', data[key])
-            ...data[key]
-        }))
-        : data
+    if (method === 'patch') {
+        return data
+    } else {
+        return data && !data._id
+            ? Object.keys(data).map((key) => ({
+                // console.log('data', data)
+                // console.log('key', key)
+                // console.log('data[key]', data[key])
+                ...data[key]
+            }))
+            : data
+    }
 }
 
 http.interceptors.response.use(
     (res) => {
         // console.log('res.data', res.data)
+        // console.log('res.config.method !== \'patch\'', res.config.method !== 'patch')
         if (configFile.isFirebase) {
-            res.data = { content: transformData(res.data) }
+            res.data = { content: transformData(res.data, res.config.method) }
         }
         // console.log('res.data', res.data)
         return res
@@ -120,6 +125,7 @@ const httpService = {
     get: http.get,
     post: http.post,
     put: http.put,
-    delete: http.delete
+    delete: http.delete,
+    patch: http.patch
 }
 export default httpService

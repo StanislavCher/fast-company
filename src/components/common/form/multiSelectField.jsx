@@ -3,7 +3,22 @@ import PropTypes from 'prop-types'
 // import Select from 'react-select/base'
 import Select from 'react-select'
 
-const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
+const MultiSelectField = ({ options, onChange, name, label, userQuality }) => {
+    // console.log('options', options)
+    // console.log('userQuality', userQuality)
+    // const dogOptions = [
+    //     {
+    //         label: 'Алкоголик',
+    //         value: 0,
+    //         color: 'danger'
+    //     },
+    //     {
+    //         label: 'Красавчик',
+    //         value: 1,
+    //         color: 'info'
+    //     }
+    // ]
+    // console.log('dogOptions', dogOptions)
     // const optionsArray =
     //     !Array.isArray(options) && typeof (options) === 'object'
     //         ? Object.keys(options).map(optionName => {
@@ -39,8 +54,11 @@ const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
             <Select
                 isMulti
                 closeMenuOnSelect={false}
-                defaultValue={defaultValue}
+                // defaultValue={defaultValue}
                 options={optionsArray}
+                // defaultValue={dogOptions[0]}
+                // defaultValue={dogOptions}
+                defaultValue={userQuality}
                 className='basic-multi-select'
                 classNamePrefix='select'
                 // onChange={onChange}
@@ -55,7 +73,8 @@ MultiSelectField.propTypes = {
     name: PropTypes.string,
     options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
     onChange: PropTypes.func,
-    defaultValue: PropTypes.array,
+    // defaultValue: PropTypes.array,
+    userQuality: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
     label: PropTypes.string
 }
 export default MultiSelectField

@@ -2,6 +2,7 @@ export const validator = (data, config) => {
     const errors = {}
 
     const validate = (validateMethod, data, config) => {
+        // console.log(data)
         const emailRegExp = /^\S+@\S+\.\S+$/g
         const capitalChar = /[A-Z]+/g
         const digit = /\d+/g

@@ -3,10 +3,12 @@ import localStorageService from './localStorage.service'
 const userEndpoint = 'user/'
 
 const userService = {
-    // update: async (id, content) => {
-    //     const {data} = await httpService.put(qualityEndpoint + id, content)
-    //     return data
-    // },
+    update: async (id, content) => {
+        // console.log(id)
+        // console.log(content)
+        const { data } = await httpService.patch(userEndpoint + id, content)
+        return data
+    },
     get: async () => {
         const { data } = await httpService.get(userEndpoint)
         return data

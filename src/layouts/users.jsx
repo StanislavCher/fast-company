@@ -1,10 +1,11 @@
 import React from 'react'
 import UsersListPage from '../components/page/usersListPage'
 // import { useParams, useLocation } from 'react-router-dom'
-import { useParams } from 'react-router-dom'
+import { useParams, Redirect } from 'react-router-dom'
 import UserPage from '../components/page/userPage'
 import UserEditPage from '../components/page/userEditPage'
 import UserProvider from '../hooks/useUsers'
+import { useAuth } from '../hooks/useAuth'
 // import PropTypes from 'prop-types'
 
 const Users = () => {
@@ -13,6 +14,7 @@ const Users = () => {
     // console.log(userId)
     // console.log(pathname)
     // console.log(edit)
+    const { currentUser } = useAuth()
     return (
         <>
             {/* <h1>Users</h1>*/}
@@ -25,7 +27,9 @@ const Users = () => {
                 {userId
                     // ? !pathname.includes('/edit')
                     ? edit
-                        ? <UserEditPage userId={userId} />
+                        ? (userId === currentUser._id)
+                            ? <UserEditPage userId={userId} />
+                            : <Redirect to={`/users/${currentUser._id}/edit`} />
                         : <UserPage userId={userId} />
                     : <UsersListPage />
                 }
