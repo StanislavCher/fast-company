@@ -8,16 +8,21 @@ import MultiSelectField from '../common/form/multiSelectField'
 // import CheckBoxField from '../common/form/checkBoxField'
 import PropTypes from 'prop-types'
 import { useHistory } from 'react-router-dom'
-import { useProfession } from '../../hooks/useProfession'
-import { useQuality } from '../../hooks/useQuality'
+// import { useProfession } from '../../hooks/useProfession'
+// import { useQuality } from '../../hooks/useQuality'
 import { useAuth } from '../../hooks/useAuth'
+import { getQualities, getQualitiesLoadingStatus } from '../../store/qualities'
+import { useSelector } from 'react-redux'
+import { getProfessions, getProfessionsLoadingStatus } from '../../store/professions'
 
 const UserEditForm = ({ userId }) => {
     // console.log('render')
     const { isLoading: userLoading, updateUser, currentUser } = useAuth()
     // console.log(currentUser)
     // const [professions, setProfessions] = useState([])
-    const { isLoading: professionLoading, profession } = useProfession()
+    // const { isLoading: professionLoading, profession } = useProfession()
+    const professionLoading = useSelector(getProfessionsLoadingStatus())
+    const profession = useSelector(getProfessions())
     // console.log(profession)
     const professions = profession.map((prof) => ({
         label: prof.name,
@@ -25,7 +30,9 @@ const UserEditForm = ({ userId }) => {
     }))
     // console.log(professions)
     // const [qualities, setQualities] = useState([])
-    const { isLoading: qualityLoading, qualities } = useQuality()
+    // const { isLoading: qualityLoading, qualities } = useQuality()
+    const qualities = useSelector(getQualities())
+    const qualityLoading = useSelector(getQualitiesLoadingStatus())
     // console.log('isLoading', isLoading)
     // console.log(qualities)
     // useEffect(() => {
@@ -230,7 +237,7 @@ const UserEditForm = ({ userId }) => {
         const userData = {
             ...data,
             // profession: getProfessionById(profession),
-            qualities: getQualities(qualities)
+            qualities: getQualities1(qualities)
         }
 
         // console.log(userData)
@@ -280,7 +287,7 @@ const UserEditForm = ({ userId }) => {
     //     return qualitiesArray
     // }
 
-    const getQualities = (elements) => {
+    const getQualities1 = (elements) => {
         // console.log(elements)
         const qualitiesArray = []
         for (const elem of elements) {

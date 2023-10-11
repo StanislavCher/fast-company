@@ -6,25 +6,30 @@ import SelectField from '../common/form/selectField'
 import RadioField from '../common/form/radioField'
 import MultiSelectField from '../common/form/multiSelectField'
 import CheckBoxField from '../common/form/checkBoxField'
-import { useProfession } from '../../hooks/useProfession'
-import { useQuality } from '../../hooks/useQuality'
+// import { useProfession } from '../../hooks/useProfession'
+// import { useQuality } from '../../hooks/useQuality'
 import { useAuth } from '../../hooks/useAuth'
 import { useHistory } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { getQualities } from '../../store/qualities'
+import { getProfessions } from '../../store/professions'
 
 const RegisterForm = () => {
     const history = useHistory()
     const { signUp } = useAuth()
     // const [professions, setProfessions] = useState([])
-    const { profession } = useProfession()
-    // console.log(profession)
+    // const { profession } = useProfession()
+    const profession = useSelector(getProfessions())
+    console.log(profession)
     const professionList = profession.map((prof) => ({
         label: prof.name,
         value: prof._id
     }))
     // console.log(professionList)
     // const [qualities, setQualities] = useState([])
-    const { qualities } = useQuality()
-    // console.log(qualities)
+    // const { qualities } = useQuality()
+    const qualities = useSelector(getQualities())
+    console.log(qualities)
     const qualitiesList = qualities.map((q) => ({
         label: q.name,
         value: q._id,

@@ -9,8 +9,10 @@ import QualitiesCard from '../../ui/cards/qualitiesCard'
 import MeetingsCard from '../../ui/cards/meetingsCard'
 import CommentsCard from '../../ui/cards/commentsCard'
 import { useUser } from '../../../hooks/useUsers'
-import { useProfession } from '../../../hooks/useProfession'
+// import { useProfession } from '../../../hooks/useProfession'
 import { CommentsProvider } from '../../../hooks/useComments'
+import { useSelector } from 'react-redux'
+import { getProfessionById, getProfessionsLoadingStatus } from '../../../store/professions'
 
 const UserPage = ({ userId }) => {
     // console.log('render')
@@ -41,11 +43,14 @@ const UserPage = ({ userId }) => {
         })
     })
     // console.log('userList', userList)
-    const { isLoading: professionsLoading, getProfession } = useProfession()
+    // const { isLoading: professionsLoading, getProfession } = useProfession()
+    const professionsLoading = useSelector(getProfessionsLoadingStatus())
+    const getProfession = useSelector(getProfessionById(userData.profession))
     const [profession, setProfession] = useState('')
     useEffect(() => {
         if (!professionsLoading) {
-            setProfession(getProfession(userData.profession).name)
+            // setProfession(getProfession(userData.profession).name)
+            setProfession(getProfession.name)
             // console.log('render')
         }
     }, [professionsLoading, userData])

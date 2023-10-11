@@ -9,13 +9,17 @@ import UsersTable from '../../ui/usersTable'
 import _ from 'lodash'
 import TextField from '../../common/form/textField'
 import { useUser } from '../../../hooks/useUsers'
-import { useProfession } from '../../../hooks/useProfession'
+// import { useProfession } from '../../../hooks/useProfession'
 import { useAuth } from '../../../hooks/useAuth'
+import { useSelector } from 'react-redux'
+import { getProfessions, getProfessionsLoadingStatus } from '../../../store/professions'
 
 const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const { currentUser } = useAuth()
-    const { isLoading: professionsLoading, profession: professions } = useProfession()
+    // const { isLoading: professionsLoading, profession: professions } = useProfession()
+    const professions = useSelector(getProfessions())
+    const professionsLoading = useSelector(getProfessionsLoadingStatus())
     // const [professions, setProfessions] = useState(undefined)
     const [selectedProf, setSelectedProf] = useState(undefined)
     const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
