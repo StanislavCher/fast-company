@@ -1,15 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 // import { useProfession } from '../../hooks/useProfession'
 import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 // import { loadQualitiesList } from '../../store/qualities'
-import { getProfessionById, getProfessionsLoadingStatus } from '../../store/professions'
+import { getProfessionById, getProfessionsLoadingStatus, loadProfessionsList } from '../../store/professions'
 
 const Profession = ({ id }) => {
-    // const dispatch = useDispatch()
-    // useEffect(() => {
-    //     dispatch(loadProfessionsList())
-    // }, [])
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(loadProfessionsList())
+    }, [])
     // console.log(id)
     // const { isLoading, getProfession } = useProfession()
     // const { getProfession } = useProfession()
