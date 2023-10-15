@@ -8,22 +8,27 @@ import UserCard from '../../ui/cards/userCard'
 import QualitiesCard from '../../ui/cards/qualitiesCard'
 import MeetingsCard from '../../ui/cards/meetingsCard'
 import CommentsCard from '../../ui/cards/commentsCard'
-import { useUser } from '../../../hooks/useUsers'
+// import { useUser } from '../../../hooks/useUsers'
 // import { useProfession } from '../../../hooks/useProfession'
 import { CommentsProvider } from '../../../hooks/useComments'
 import { useSelector } from 'react-redux'
 import { getProfessionById, getProfessionsLoadingStatus } from '../../../store/professions'
+import { getUsers, getUsersByIds, getUsersLoadingStatus } from '../../../store/users'
 
 const UserPage = ({ userId }) => {
     // console.log('render')
-    const { isLoading: usersLoading, users, getUserById } = useUser()
+    // const { isLoading: usersLoading, users, getUserById } = useUser()
+    const usersLoading = useSelector(getUsersLoadingStatus())
+    const users = useSelector(getUsers())
     // const { isLoading: usersLoading, users, getUserById, getUsers } = useUser()
     // useEffect(() => {
     //     getUsers()
     // }, [])
     // const { getUserById } = useUser()
-    const userData = getUserById(userId)
+    // const userData = getUserById(userId)
+    const userData = useSelector(getUsersByIds(userId))
     // console.log('userData', userData)
+    // console.log('users', users)
     // const [userData, setUserData] = useState([])
     const [isLoading, setLoading] = useState(true)
     useEffect(() => {
@@ -53,7 +58,8 @@ const UserPage = ({ userId }) => {
             setProfession(getProfession.name)
             // console.log('render')
         }
-    }, [professionsLoading, userData])
+    }, [professionsLoading, usersLoading])
+    // }, [professionsLoading, userData])
 
     const history = useHistory()
 
@@ -82,7 +88,9 @@ const UserPage = ({ userId }) => {
     //     // history.push(`/users/${userId}`)
     //     history.push(`/users`)
     // }
-
+    // console.log(isLoading)
+    // console.log(usersLoading)
+    // console.log(professionsLoading)
     if (!isLoading) {
         return (
             <>

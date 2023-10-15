@@ -43,10 +43,10 @@ export const getUsers = () => (state) => state.users.entities
 export const getUsersLoadingStatus = () => (state) => state.users.isLoading
 
 export const getUsersByIds = (userIds) => (state) => {
-    if (userIds) {
-        return state.users.entities.filter((q) => {
-            return userIds.find((id) => id === q._id)
-        })
+    if (userIds && state.users.entities) {
+        return state.users.entities.filter((u) => {
+            return u._id === userIds
+        })[0]
     } else return []
 }
 
