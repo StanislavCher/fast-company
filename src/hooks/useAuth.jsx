@@ -154,7 +154,7 @@ const AuthProvider = ({ children }) => {
     }
 
     function errorCatcher(error) {
-        // console.log('My error', error)
+        console.log('My error', error)
         const { message } = error.response.data
         setErrors(message)
     }

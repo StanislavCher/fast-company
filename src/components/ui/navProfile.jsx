@@ -1,13 +1,21 @@
 import React, { useState } from 'react'
-import { useAuth } from '../../hooks/useAuth'
+// import { useAuth } from '../../hooks/useAuth'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { getCurrentUserData, getCurrentUserId } from '../../store/users'
 
 const NavProfile = () => {
-    const { currentUser } = useAuth()
+    // const { currentUser } = useAuth()
+    const currentUser = useSelector(getCurrentUserData())
+    const currentUserId = useSelector(getCurrentUserId())
     const [isOpen, setOpen] = useState(false)
     const toggleMenu = () => {
         setOpen(prevState => !prevState)
     }
+    // console.log('render user bar')
+    // console.log(currentUserId)
+    // console.log(currentUser)
+    if (!currentUser) return 'Loading...'
     return (
         <div className="dropdown" onClick={toggleMenu}>
             <div className="btn dropdown-toggle d-flex align-items-center">
@@ -24,7 +32,7 @@ const NavProfile = () => {
             </div>
             <div className={'w-100 dropdown-menu' + (isOpen ? ' show' : '')}>
                 <Link
-                    to={`/users/${currentUser._id}`}
+                    to={`/users/${currentUserId}`}
                     className="dropdown-item"
                 >
                     Profile

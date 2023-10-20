@@ -8,17 +8,19 @@ import MultiSelectField from '../common/form/multiSelectField'
 import CheckBoxField from '../common/form/checkBoxField'
 // import { useProfession } from '../../hooks/useProfession'
 // import { useQuality } from '../../hooks/useQuality'
-import { useAuth } from '../../hooks/useAuth'
-import { useHistory } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+// import { useAuth } from '../../hooks/useAuth'
+// import { useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { getQualities } from '../../store/qualities'
 import { getProfessions } from '../../store/professions'
+import { signUp } from '../../store/users'
 
 const RegisterForm = () => {
-    const history = useHistory()
-    const { signUp } = useAuth()
+    // const history = useHistory()
+    // const { signUp } = useAuth()
     // const [professions, setProfessions] = useState([])
     // const { profession } = useProfession()
+    const dispatch = useDispatch()
     const profession = useSelector(getProfessions())
     console.log(profession)
     const professionList = profession.map((prof) => ({
@@ -152,14 +154,15 @@ const RegisterForm = () => {
         //
         // console.log(data)
         // console.log(newData)
-        try {
-            await signUp(newData)
-            history.push('/')
-        } catch (error) {
-            setErrors(error)
-            // console.log(error)
-            // console.log(errors)
-        }
+        // try {
+        // await signUp(newData)
+        dispatch(signUp(newData))
+        // history.push('/')
+        // } catch (error) {
+        //     setErrors(error)
+        // console.log(error)
+        // console.log(errors)
+        // }
     }
 
     // const getProfessionById = (id) => {

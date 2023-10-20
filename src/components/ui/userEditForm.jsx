@@ -7,17 +7,22 @@ import RadioField from '../common/form/radioField'
 import MultiSelectField from '../common/form/multiSelectField'
 // import CheckBoxField from '../common/form/checkBoxField'
 import PropTypes from 'prop-types'
-import { useHistory } from 'react-router-dom'
+// import { useHistory } from 'react-router-dom'
 // import { useProfession } from '../../hooks/useProfession'
 // import { useQuality } from '../../hooks/useQuality'
-import { useAuth } from '../../hooks/useAuth'
+// import { useAuth } from '../../hooks/useAuth'
 import { getQualities, getQualitiesLoadingStatus } from '../../store/qualities'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getProfessions, getProfessionsLoadingStatus } from '../../store/professions'
+import { getCurrentUserData, getUsersLoadingStatus, updateUserData } from '../../store/users'
 
 const UserEditForm = ({ userId }) => {
     // console.log('render')
-    const { isLoading: userLoading, updateUser, currentUser } = useAuth()
+    // const { isLoading: userLoading, updateUser, currentUser } = useAuth()
+    // const { isLoading: userLoading, updateUser } = useAuth()
+    const dispatch = useDispatch()
+    const userLoading = useSelector(getUsersLoadingStatus())
+    const currentUser = useSelector(getCurrentUserData())
     // console.log(currentUser)
     // const [professions, setProfessions] = useState([])
     // const { isLoading: professionLoading, profession } = useProfession()
@@ -117,7 +122,7 @@ const UserEditForm = ({ userId }) => {
     const [errors, setErrors] = useState({})
     // const [isLoading, setIsLoading] = useState(true)
 
-    const history = useHistory()
+    // const history = useHistory()
 
     useEffect(() => {
         setErrors(validator(data, validatorConfig))
@@ -221,7 +226,7 @@ const UserEditForm = ({ userId }) => {
 
     const isValid = Object.keys(errors).length === 0
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         // console.log(data)
         e.preventDefault()
         const isValid = validate()
@@ -243,7 +248,7 @@ const UserEditForm = ({ userId }) => {
         // console.log(userData)
         // console.log(updateUserData)
 
-        await updateUserData(currentUser._id, userData)
+        updateUserData1(currentUser._id, userData)
 
         // console.log(data)
 
@@ -256,11 +261,14 @@ const UserEditForm = ({ userId }) => {
         //         history.push(`/users/${data._id}`)
         //     })
         // history.push(`/users/${data._id}`)
-        history.push(`/users/${currentUser._id}`)
+        // history.push(`/users/${currentUser._id}`)
     }
 
-    async function updateUserData(id, userData) {
-        await updateUser(id, userData)
+    // async function updateUserData1(id, userData) {
+    //     await updateUser(id, userData)
+    // }
+    function updateUserData1(id, userData) {
+        dispatch(updateUserData(id, userData))
     }
 
     // const getProfessionById = (id) => {

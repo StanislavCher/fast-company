@@ -10,14 +10,15 @@ import _ from 'lodash'
 import TextField from '../../common/form/textField'
 // import { useUser } from '../../../hooks/useUsers'
 // import { useProfession } from '../../../hooks/useProfession'
-import { useAuth } from '../../../hooks/useAuth'
+// import { useAuth } from '../../../hooks/useAuth'
 import { useSelector } from 'react-redux'
 import { getProfessions, getProfessionsLoadingStatus } from '../../../store/professions'
-import { getUsers } from '../../../store/users'
+import { getCurrentUserId, getUsers } from '../../../store/users'
 
 const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1)
-    const { currentUser } = useAuth()
+    // const { currentUser } = useAuth()
+    const currentUserId = useSelector(getCurrentUserId())
     // const { isLoading: professionsLoading, profession: professions } = useProfession()
     const professions = useSelector(getProfessions())
     const professionsLoading = useSelector(getProfessionsLoadingStatus())
@@ -97,7 +98,8 @@ const UsersListPage = () => {
                         )
                     })
                     : data
-            return selectedUsers.filter((user) => user._id !== currentUser._id)
+            // return selectedUsers.filter((user) => user._id !== currentUser._id)
+            return selectedUsers.filter((user) => user._id !== currentUserId)
         }
         const selectedUsers = filterUsers(users)
 

@@ -3,14 +3,17 @@ import PropTypes from 'prop-types'
 import createDate from '../../../utils/date'
 import { useComments } from '../../../hooks/useComments'
 import Card from './card'
-import { useAuth } from '../../../hooks/useAuth'
+import { useSelector } from 'react-redux'
+import { getCurrentUserId } from '../../../store/users'
+// import { useAuth } from '../../../hooks/useAuth'
 // import api from "../../../api";
 
 const CommentsCard = ({ user, users }) => {
     // console.log('users', users)
     // console.log('user', user)
     const { comments, removeComment } = useComments()
-    const { currentUser } = useAuth()
+    // const { currentUser } = useAuth()
+    const currentUserId = useSelector(getCurrentUserId())
     // console.log('currentUser', currentUser)
     // console.log('comments', comments)
     // const commentsForUser = createComment(userId).then((data) => { userComments = data })
@@ -69,7 +72,7 @@ const CommentsCard = ({ user, users }) => {
                                                             {createDate(comment.created_at)}
                                                         </span>
                                                     </p>
-                                                    {currentUser._id === comment.userId && (<button
+                                                    {currentUserId === comment.userId && (<button
                                                         className="btn btn-sm text-primary d-flex align-items-center"
                                                         name={comment._id}
                                                         id={comment._id}

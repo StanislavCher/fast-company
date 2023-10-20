@@ -2,15 +2,18 @@ import React, { useState, useEffect } from 'react'
 import TextField from '../common/form/textField'
 import { validator } from '../../utils/validator'
 import CheckBoxField from '../common/form/checkBoxField'
+import { useDispatch } from 'react-redux'
+import { login } from '../../store/users'
 import { useHistory } from 'react-router-dom'
-import { useAuth } from '../../hooks/useAuth'
+// import { useAuth } from '../../hooks/useAuth'
 // import * as yup from 'yup'
 // import { object, string, ValidationError } from 'yup'
 
 const LoginForm = () => {
     const history = useHistory()
     // console.log(history.location.state.from.pathname)
-    const { signIn } = useAuth()
+    // const { signIn } = useAuth()
+    const dispatch = useDispatch()
     // console.log(process.env)
     const [data, setData] = useState({
         email: '',
@@ -107,17 +110,21 @@ const LoginForm = () => {
         const isValid = validate()
         if (!isValid) return
         // console.log(data)
-        try {
-            await signIn(data)
-            history.push(
-                history.location.state
-                    ? history.location.state.from.pathname
-                    : '/')
-        } catch (error) {
-            setEnterError(error.message)
-            // console.log(error)
-            // console.log(errors)
-        }
+        // try {
+        // await signIn(data)
+        const redirect = history.location.state
+            ? history.location.state.from.pathname
+            : '/'
+        dispatch(login({ payload: data, redirect }))
+        // history.push(
+        //     history.location.state
+        //         ? history.location.state.from.pathname
+        //         : '/')
+        // } catch (error) {
+        //     setEnterError(error.message)
+        //     // console.log(error)
+        //     // console.log(errors)
+        // }
     }
 
     return (
