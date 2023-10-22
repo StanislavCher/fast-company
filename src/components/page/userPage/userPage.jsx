@@ -10,7 +10,7 @@ import MeetingsCard from '../../ui/cards/meetingsCard'
 import CommentsCard from '../../ui/cards/commentsCard'
 // import { useUser } from '../../../hooks/useUsers'
 // import { useProfession } from '../../../hooks/useProfession'
-import { CommentsProvider } from '../../../hooks/useComments'
+// import { CommentsProvider } from '../../../hooks/useComments'
 import { useSelector } from 'react-redux'
 import { getProfessionById, getProfessionsLoadingStatus } from '../../../store/professions'
 import { getUsers, getUsersByIds, getUsersLoadingStatus } from '../../../store/users'
@@ -127,27 +127,27 @@ const UserPage = ({ userId }) => {
                         {/* // Comments - right side*/}
                         <div className="col-md-8">
                             {/* // Add comment form*/}
-                            <CommentsProvider>
-                                <Card>
-                                    <CommentAddForm
-                                        userId={userId}
-                                        // users={userList}
-                                        updateForm={handleUpdateForm}
-                                    />
-                                </Card>
-                                {/* // Display comments*/}
-                                {/* { userComments && (userComments?.length > 0)*/}
-                                {/*    ? (<Card>*/}
-                                <CommentsCard
-                                    // handleDelClick={handleDelClick}
-                                    users={userList}
-                                    user={userData}
-                                    // userComments={userComments}
-                                    // userId={userId}
+                            {/* <CommentsProvider>*/}
+                            <Card>
+                                <CommentAddForm
+                                    userId={userId}
+                                    // users={userList}
+                                    updateForm={handleUpdateForm}
                                 />
-                                {/* </Card>)*/}
-                                {/* : ''}*/}
-                            </CommentsProvider>
+                            </Card>
+                            {/* // Display comments*/}
+                            {/* { userComments && (userComments?.length > 0)*/}
+                            {/*    ? (<Card>*/}
+                            <CommentsCard
+                                // handleDelClick={handleDelClick}
+                                users={userList}
+                                user={userData}
+                                // userComments={userComments}
+                                // userId={userId}
+                            />
+                            {/* </Card>)*/}
+                            {/* : ''}*/}
+                            {/* */}
                         </div>
                     </div>
                 </div>
