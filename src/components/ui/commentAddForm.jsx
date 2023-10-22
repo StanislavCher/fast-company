@@ -4,11 +4,16 @@ import { validator } from '../../utils/validator'
 // import SelectField from '../common/form/selectField'
 import PropTypes from 'prop-types'
 import TextAreaField from '../common/form/textAreaField'
-import { useComments } from '../../hooks/useComments'
+// import { useComments } from '../../hooks/useComments'
+import { useDispatch } from 'react-redux'
+// import { getCurrentUserId } from '../../store/users'
+import { createComment } from '../../store/comments'
 // import { useHistory } from 'react-router-dom'
 
 const CommentAddForm = ({ userId, updateForm }) => {
-    const { createComment } = useComments()
+    // const { createComment } = useComments()
+    const dispatch = useDispatch()
+    // const currentUserId = useSelector(getCurrentUserId())
     const [data, setData] = useState({
         content: ''
     })
@@ -80,8 +85,12 @@ const CommentAddForm = ({ userId, updateForm }) => {
         if (!isValid) return
         // console.log(e.target[1].name)
         // console.log(e.target[1].value)
-        const { content } = data
-        const pageId = userId
+        // const { content } = data
+        // const payload = content
+        // const pageId = userId
+        // console.log(content)
+        // console.log(pageId)
+        // console.log(currentUserId)
 
         // console.log({
         //     ...data,
@@ -92,7 +101,7 @@ const CommentAddForm = ({ userId, updateForm }) => {
         // console.log('user', user)
         // console.log('comment', text)
 
-        createComment({ content, pageId })
+        dispatch(createComment({ ...data, pageId: userId }))
 
         // api.comments.add({
         //     _id: Math.random().toString(36).substr(2, 9),

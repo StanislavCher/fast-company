@@ -4,6 +4,7 @@ import { authService } from '../services/auth.service'
 import localStorageService, { setTokens } from '../services/localStorage.service'
 import getRandomInt from '../utils/getRandomInt'
 import history from '../utils/history'
+import generateAuthError from '../utils/generateAuthError'
 // import isOutDated from '../utils/isOutdated'
 
 const authRequested = createAction('users/authRequested')
@@ -83,6 +84,9 @@ const usersSlice = createSlice({
                 (u) => u._id === action.payload._id)
             state.entities[index] =
                 { ...state.entities[index], ...action.payload }
+        },
+        authRequested: (state) => {
+            state.error = null
         }
         // usersUpdateFailed: (state, action) => {
         //     state.error = action.payload
@@ -90,7 +94,7 @@ const usersSlice = createSlice({
     }
 })
 
-export const loadUsersList = () => async (dispatch, getState) => {
+export const loadUsersList = () => async (dispatch) => {
     // const { lastFetch } = getState().users
     // console.log(lastFetch)
     // if (isOutDated(lastFetch)) {
@@ -119,13 +123,14 @@ export const getDataStatus = () => (state) => state.users.dataLoaded
 
 export const getCurrentUserId = () => (state) => state.users.auth.userId
 
+export const getAuthErrors = () => (state) => state.users.error
 export const getCurrentUserData = () => (state) => {
     return state.users.entities
         ? state.users.entities.find((u) => u._id === state.users.auth.userId)
         : null
 }
 
-export const signUp = ({ email, password, ...rest }) => async (dispatch, getState) => {
+export const signUp = ({ email, password, ...rest }) => async (dispatch) => {
     // const { lastFetch } = getState().users
     // console.log(lastFetch)
     // if (isOutDated(lastFetch)) {
@@ -149,7 +154,13 @@ export const signUp = ({ email, password, ...rest }) => async (dispatch, getStat
             ...rest
         }))
     } catch (error) {
-        dispatch(authRequestFailed(error.message))
+        const { code, message } = error.response.data.error
+        if (code === 400) {
+            const errorMessage = generateAuthError(message)
+            dispatch(authRequestFailed(errorMessage))
+        } else {
+            dispatch(authRequestFailed(error.message))
+        }
     }
     // }
 }
@@ -163,7 +174,13 @@ export const login = ({ payload, redirect }) => async (dispatch) => {
         setTokens(data)
         history.push(redirect)
     } catch (error) {
-        dispatch(authRequestFailed(error.message))
+        const { code, message } = error.response.data.error
+        if (code === 400) {
+            const errorMessage = generateAuthError(message)
+            dispatch(authRequestFailed(errorMessage))
+        } else {
+            dispatch(authRequestFailed(error.message))
+        }
     }
 }
 
